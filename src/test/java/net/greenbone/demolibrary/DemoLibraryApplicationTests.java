@@ -1,6 +1,6 @@
-package com.example.demolibrary;
+package net.greenbone.demolibrary;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest

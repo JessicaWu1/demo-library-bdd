@@ -1,4 +1,4 @@
-package com.example.demolibrary;
+package net.greenbone.demolibrary;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
