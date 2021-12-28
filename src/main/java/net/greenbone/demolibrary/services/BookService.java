@@ -3,7 +3,7 @@ package net.greenbone.demolibrary.services;
 import lombok.RequiredArgsConstructor;
 import net.greenbone.demolibrary.adapter.persistence.BookRepository;
 import net.greenbone.demolibrary.domain.aggregates.Book;
-import net.greenbone.demolibrary.domain.services.helper.MapperDtoToEntity;
+import net.greenbone.demolibrary.services.helper.MapperDtoToEntity;
 
 @RequiredArgsConstructor
 public class BookService {

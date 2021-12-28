@@ -3,7 +3,7 @@ package net.greenbone.demolibrary.adapter.http;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.greenbone.demolibrary.domain.aggregates.Book;
-import net.greenbone.demolibrary.domain.services.helper.MapperEntityToDto;
+import net.greenbone.demolibrary.services.helper.MapperEntityToDto;
 import net.greenbone.demolibrary.representations.response.BookResponse;
 import net.greenbone.demolibrary.services.BookService;
 import org.springframework.http.HttpStatus;
