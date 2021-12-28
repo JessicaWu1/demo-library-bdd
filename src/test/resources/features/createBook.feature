@@ -1,5 +1,12 @@
 Feature: create a new Book
 
+  Scenario: user creates a new book
+    Given Given user has role "ADMIN"
+    And user is logged in
+    When user creates a new book with the needed information
+    Then book is created
+    And status code 201 is returned
+
   Scenario: Book without a name
     Given user has role "ADMIN"
     And user is logged in
