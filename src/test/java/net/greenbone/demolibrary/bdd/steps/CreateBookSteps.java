@@ -1,5 +1,8 @@
 package net.greenbone.demolibrary.bdd.steps;
 
+import feign.Feign;
+import feign.gson.GsonDecoder;
+import feign.gson.GsonEncoder;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -18,7 +21,12 @@ public class CreateBookSteps {
 
     @When("user creates a new book with the needed information")
     public void userCreatesANewBookWithTheNeededInformation() {
-        
+        /*ProcedureDto procedureDto = new ProcedureDto(null, 250f);
+        Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
+                .decoder(new GsonDecoder())
+                .encoder(new GsonEncoder());
+        ProcedureClient procedureClient = encoder.target(ProcedureClient.class, "http://localhost:8081");
+        responseDto = procedureClient.createProcedure(procedureDto);*/
     }
 
     @Then("book is created")
