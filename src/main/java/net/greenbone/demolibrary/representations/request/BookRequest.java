@@ -1,6 +1,7 @@
 package net.greenbone.demolibrary.representations.request;
 
 import lombok.*;
+import net.greenbone.demolibrary.domain.aggregates.Book;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -10,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookRequest {
+public class BookRequest implements Book.Create{
     @NotNull(message = "Title required.")
     @NotEmpty(message = "Title is not specified.")
     private String title;

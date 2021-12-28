@@ -1,9 +1,6 @@
 package net.greenbone.demolibrary.domain.aggregates;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Book {
     @Id
     @GeneratedValue
@@ -50,4 +48,35 @@ public class Book {
     @NotNull(message = "Quantity is required.")
     @Setter
     private Integer quantity;
+
+
+
+    public interface Create {
+
+        String getAuthor();
+
+        String getTitle();
+
+        String getDescription();
+
+        String getPublisher();
+
+        Integer getQuantity();
+
+        Integer getPublishingYear();
+    }
+
+    public interface Update {
+        String getAuthor();
+
+        String getTitle();
+
+        String getDescription();
+
+        String getPublisher();
+
+        Integer getQuantity();
+
+        Integer getPublishingYear();
+    }
 }
