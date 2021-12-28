@@ -4,11 +4,10 @@ Feature: user is not logged in or not an
     Given user is logged in
     When user tries to create a book
     #needs to be specified
-    Then an Exception is returned
+    Then status code 403 is returned
 
   Scenario: User is not logged in
-    Given user is of role 'ADMIN'
-    When user tries to create a  book
+    When user does any action
     #needs to be specified
-    Then an Exception is returned
+    Then status code 401 is returned
 
