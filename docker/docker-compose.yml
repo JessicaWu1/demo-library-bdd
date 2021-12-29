@@ -1,0 +1,26 @@
+version: '3.1'
+services:
+  library-demo-service-db: #name des containers;
+    image: postgres:11.5 #image von dem der container gebaut werden soll
+    ports: # angaben der verwendeten port weiterleitungen; optional
+      - 5432:5432 #host:containerport
+    environment:
+      - POSTGRES_DB=library demodb
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=pwd
+    volumes: # -v
+      - ./createschema.sql:/docker-entrypoint-initdb.d/1-schema.sql #:postgres spezifische datei
+    #restart: always
+
+  library-demo-keycloak:
+    image: jboss/keycloak:11.0.2
+    ports:
+      - 8080:8080
+      - 9990:9990
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=h2
+
+
+#depends on, angabe eines anderen service namens: startet dann den service nur wenn das angegeben auch "up" ist -> nicht unbedingt alle daten müssen vorhanden sien

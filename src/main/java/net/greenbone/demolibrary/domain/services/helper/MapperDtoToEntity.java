@@ -1,4 +1,4 @@
-package net.greenbone.demolibrary.services.helper;
+package net.greenbone.demolibrary.domain.services.helper;
 
 import net.greenbone.demolibrary.domain.aggregates.Book;
 import net.greenbone.demolibrary.representations.request.BookRequest;

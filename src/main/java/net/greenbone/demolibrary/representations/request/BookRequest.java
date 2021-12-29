@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookRequest implements Book.Create{
+public class BookRequest implements Book.Create, Book.Update{
     @NotNull(message = "Title required.")
     @NotEmpty(message = "Title is not specified.")
     private String title;

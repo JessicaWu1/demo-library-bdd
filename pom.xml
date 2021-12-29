@@ -15,7 +15,12 @@
     <description>demo-library</description>
     <properties>
         <java.version>11</java.version>
-        <cucumber.version>7.0.0</cucumber.version>
+        <cucumber.version>7.1.0</cucumber.version>
+        <service.entity.package>com.example.demolibrary.domain.aggregates</service.entity.package>
+        <service.liquibase.reference.url>
+            hibernate:spring:${service.entity.package}?dialect=liquibase.ext.hibernate.database.HibernateGenericDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy&amp;hibernate.ejb.naming_strategy=org.hibernate.cfg.ImprovedNamingStrategy
+        </service.liquibase.reference.url>
+        <liquibase.logging>debug</liquibase.logging>
     </properties>
     <dependencies>
         <dependency>
@@ -24,15 +29,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -45,27 +42,28 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
+            <version>4.6.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <version>2.0.202</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <version>42.3.1</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -73,16 +71,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.amqp</groupId>
-            <artifactId>spring-rabbit-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+
 
         <!-- for BDD Testing -->
         <dependency>
@@ -106,13 +95,19 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-gson</artifactId>
-            <version>10.7.4</version>
+            <version>11.7</version>
         </dependency>
 
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-core</artifactId>
-            <version>10.7.4</version>
+            <version>11.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>4.2.6.RELEASE</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -131,7 +126,63 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.4.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.liquibase.ext</groupId>
+                        <artifactId>liquibase-hibernate4</artifactId>
+                        <version>3.5</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                        <version>4.1.7.RELEASE</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework.data</groupId>
+                        <artifactId>spring-data-jpa</artifactId>
+                        <version>1.7.3.RELEASE</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
+    <profiles>
+        <profile>
+            <id>liquibase-local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-maven-plugin</artifactId>
+                        <configuration>
+                            <driver>org.postgresql.Driver</driver>
+                            <url>jdbc:postgresql://127.0.0.1:5432/hospitaldemodb?currentSchema=application</url>
+                            <username>test</username>
+                            <password>pwd</password>
+                            <changeLogFile>src/main/resources/liquibase/db.changelog-master.xml</changeLogFile>
+                            <referenceUrl>${service.liquibase.reference.url}</referenceUrl>
+                            <diffChangeLogFile>src/main/resources/liquibase/db.changelog-new.xml</diffChangeLogFile>
+                            <outputChangeLogFile>src/main/resources/liquibase/db.changelog-init.xml
+                            </outputChangeLogFile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

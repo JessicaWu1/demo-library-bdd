@@ -9,6 +9,33 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class CreateBookSteps {
+
+    /*@Given("^(the user|another user|the invited user|the invited managed user) logs in( successfully)?$")
+    public void theUserIsLoggedIn(String userType, String successfully) {
+        log.info("'{}' logs in with user:'{}' to domain:'{}ui/'",
+                userType, emails.get(userType), this.userContext.baseUrl);
+
+        this.login(this.emails.get(userType), passwords.get(userType), successfully != null);
+    }
+    private void login(String emailAddress, String password, boolean withSuccessCheck) {
+        try {
+            this.userContext.tokenResponse = this.userContext.keyCloakClient
+                    .login(this.userContext.BDD_REALM_ID, new KeyCloakLoginRequestDto(emailAddress, password, this.userContext.CLIENT_ID));
+            this.userContext.usedEmail = emailAddress;
+            this.userContext.usedPassword = password;
+            this.userContext.setResponseStatusCode(200);
+        } catch (Exception e) {
+            if (withSuccessCheck) {
+                throw e;
+            }
+            this.userContext.tokenResponse = null;
+            this.userContext.usedEmail = null;
+            this.userContext.usedPassword = null;
+            this.userContext.setResponse(e);
+        }
+    }
+    */
+
     @Given("user has role {string}")
     public void givenUserHasRole(String arg0) {
     }
