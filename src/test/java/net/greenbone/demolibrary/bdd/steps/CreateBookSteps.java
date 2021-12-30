@@ -12,7 +12,6 @@ import net.greenbone.demolibrary.bdd.helper.adapter.http.client.BookClient;
 import net.greenbone.demolibrary.representations.request.BookRequest;
 import net.greenbone.demolibrary.representations.response.BookResponse;
 import org.hamcrest.Matchers;
-import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
@@ -68,6 +67,8 @@ public class CreateBookSteps {
                 .decoder(new GsonDecoder())
                 .encoder(new GsonEncoder());
         BookClient bookClient = encoder.target(BookClient.class, "http://localhost:8081");
+
+        //is this even right??
         assertThatThrownBy(() -> bookClient.createBook(bookRequest))
                 .isInstanceOf(FeignException.class);
 
