@@ -1,8 +1,10 @@
 package net.greenbone.demolibrary.representations.request;
 
 import lombok.*;
+import net.greenbone.demolibrary.domain.aggregates.ApplicationUser;
 import net.greenbone.demolibrary.domain.aggregates.LendBook;
 import net.greenbone.demolibrary.domain.enums.Role;
+import org.springframework.context.ApplicationListener;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -13,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRequest {
+public class UserRequest implements ApplicationUser.Create, ApplicationUser.Update {
     @NotEmpty(message = "Name is not specified")
     @NotNull(message = "Nam e is required.")
     private String name;
@@ -27,7 +29,7 @@ public class UserRequest {
     private String password;
 
     @NotNull(message = "User role required.")
-    private Role role;
+    private String role;
 
     @NotNull(message = "Late Fees instance required")
     private Float lateFees;

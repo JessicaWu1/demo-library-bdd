@@ -56,4 +56,32 @@ public class ApplicationUser {
         this.lateFees = (lateFees != null) ? lateFees : 0.0f;
         this.borrowedBooks = (borrowedBooks != null) ? borrowedBooks : new ArrayList<>();
     }
+
+    public interface Create {
+        String getEmail();
+
+        Float getLateFees();
+
+        String getPassword();
+
+        List<LendBook> getBorrowedBooks();
+
+        String getName();
+
+        String getRole();
+    }
+
+    public interface Update {
+        String getEmail();
+
+        Float getLateFees();
+
+        String getPassword();
+
+        List<LendBook> getBorrowedBooks();
+
+        String getName();
+
+        String getRole();
+    }
 }

@@ -78,7 +78,6 @@ public class BookRestController {
     public ResponseEntity<Object> deleteBokWithID(@PathVariable Long id){
         Book deletedBook = bookService.deleteBookWithId(id);
         if(deletedBook != null){
-            BookResponse deletedBookResponse = MapperEntityToDto.bookToBookResponse(deletedBook);
             Map<String, String> message = Collections.singletonMap("response","Successfully removed Book with ID: " + id);
             return ResponseEntity
                     .status(HttpStatus.OK)

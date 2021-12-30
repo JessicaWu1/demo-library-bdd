@@ -23,28 +23,28 @@ public class MapperEntityToDto {
                 .build();
     }
 
-    public static UserResponse userToUserResponse(ApplicationUser applicationUser){
-        List<LendBookResponse> borrowedBooks = applicationUser.getBorrowedBooks()
-                                                            .stream()
-                                                            .map(MapperEntityToDto::lendBookToLendBookResponse)
-                                                            .collect(Collectors.toList());
-        return UserResponse.builder()
-                .role(applicationUser.getRole().name())
-                .id(applicationUser.getId())
-                .name(applicationUser.getName())
-                .email(applicationUser.getEmail())
-                .lateFees(applicationUser.getLateFees())
-                .password(applicationUser.getPassword())
-                .borrowedBooks(borrowedBooks)
-                .build();
-    }
-
     public static LendBookResponse lendBookToLendBookResponse(LendBook lendBook){
         return LendBookResponse.builder()
                 .bookId(lendBook.getBook().getId())
                 .id(lendBook.getId())
                 .userId(lendBook.getApplicationUser().getId())
                 .returnDate(lendBook.getReturnDate())
+                .build();
+    }
+
+    public static UserResponse applicationUserToUserResponse(ApplicationUser applicationUser) {
+        List<LendBookResponse> borrowedBooks = applicationUser.getBorrowedBooks()
+                .stream()
+                .map(MapperEntityToDto::lendBookToLendBookResponse)
+                .collect(Collectors.toList());
+        return UserResponse.builder()
+                .id(applicationUser.getId())
+                .name(applicationUser.getName())
+                .borrowedBooks(borrowedBooks)
+                .password(applicationUser.getPassword())
+                .lateFees(applicationUser.getLateFees())
+                .email(applicationUser.getEmail())
+                .role(applicationUser.getRole().name())
                 .build();
     }
 }
