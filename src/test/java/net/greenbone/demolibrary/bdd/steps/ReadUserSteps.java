@@ -16,7 +16,4 @@ public class ReadUserSteps {
     public void userTriesToReadANonExistingUserInformation() {
     }
 
-    @Then("status code {int} s returned")
-    public void statusCodeSReturned(int arg0) {
-    }
 }

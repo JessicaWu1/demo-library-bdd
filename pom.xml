@@ -16,7 +16,7 @@
     <properties>
         <java.version>11</java.version>
         <cucumber.version>7.1.0</cucumber.version>
-        <service.entity.package>com.example.demolibrary.domain.aggregates</service.entity.package>
+        <service.entity.package>net.greenbone.demolibrary.domain.aggregates</service.entity.package>
         <service.liquibase.reference.url>
             hibernate:spring:${service.entity.package}?dialect=liquibase.ext.hibernate.database.HibernateGenericDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy&amp;hibernate.ejb.naming_strategy=org.hibernate.cfg.ImprovedNamingStrategy
         </service.liquibase.reference.url>

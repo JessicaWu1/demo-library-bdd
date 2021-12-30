@@ -5,7 +5,7 @@ services:
     ports: # angaben der verwendeten port weiterleitungen; optional
       - 5432:5432 #host:containerport
     environment:
-      - POSTGRES_DB=library demodb
+      - POSTGRES_DB=librarydemodb
       - POSTGRES_USER=test
       - POSTGRES_PASSWORD=pwd
     volumes: # -v

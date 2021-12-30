@@ -18,13 +18,13 @@ public class LendBook {
 
     @NotNull(message = "No borrowing user specified. User is required.")
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    //@JoinColumn(name = "user_id")
     @Setter
-    private User user;
+    private ApplicationUser applicationUser;
 
     @NotNull(message = "No Book specified. Book is required.")
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    //@JoinColumn(name = "book_id")
     @Setter
     private Book book;
 

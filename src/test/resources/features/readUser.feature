@@ -9,4 +9,4 @@ Feature: reading user information
   Scenario: user tries to read user information from a non-existing user
     Given user is logged in
     When user tries to read a non-existing user information
-    Then status code 404 s returned
+    Then status code 404 is returned

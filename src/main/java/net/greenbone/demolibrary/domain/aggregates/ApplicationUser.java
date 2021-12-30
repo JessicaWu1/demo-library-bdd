@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Getter
-public class User {
+public class ApplicationUser {
     @Id
     @GeneratedValue
     private Long id;
@@ -48,7 +48,7 @@ public class User {
     private List<LendBook> borrowedBooks;
 
     @Builder
-    public User(String name, String email, String password, Role role, Float lateFees, List<LendBook> borrowedBooks) {
+    public ApplicationUser(String name, String email, String password, Role role, Float lateFees, List<LendBook> borrowedBooks) {
         this.name = name;
         this.email = email;
         this.password = password;

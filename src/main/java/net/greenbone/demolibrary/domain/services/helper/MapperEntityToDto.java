@@ -1,8 +1,8 @@
 package net.greenbone.demolibrary.domain.services.helper;
 
+import net.greenbone.demolibrary.domain.aggregates.ApplicationUser;
 import net.greenbone.demolibrary.domain.aggregates.Book;
 import net.greenbone.demolibrary.domain.aggregates.LendBook;
-import net.greenbone.demolibrary.domain.aggregates.User;
 import net.greenbone.demolibrary.representations.response.BookResponse;
 import net.greenbone.demolibrary.representations.response.LendBookResponse;
 import net.greenbone.demolibrary.representations.response.UserResponse;
@@ -23,18 +23,18 @@ public class MapperEntityToDto {
                 .build();
     }
 
-    public static UserResponse userToUserResponse(User user){
-        List<LendBookResponse> borrowedBooks = user.getBorrowedBooks()
+    public static UserResponse userToUserResponse(ApplicationUser applicationUser){
+        List<LendBookResponse> borrowedBooks = applicationUser.getBorrowedBooks()
                                                             .stream()
                                                             .map(MapperEntityToDto::lendBookToLendBookResponse)
                                                             .collect(Collectors.toList());
         return UserResponse.builder()
-                .role(user.getRole().name())
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .lateFees(user.getLateFees())
-                .password(user.getPassword())
+                .role(applicationUser.getRole().name())
+                .id(applicationUser.getId())
+                .name(applicationUser.getName())
+                .email(applicationUser.getEmail())
+                .lateFees(applicationUser.getLateFees())
+                .password(applicationUser.getPassword())
                 .borrowedBooks(borrowedBooks)
                 .build();
     }
@@ -43,7 +43,7 @@ public class MapperEntityToDto {
         return LendBookResponse.builder()
                 .bookId(lendBook.getBook().getId())
                 .id(lendBook.getId())
-                .userId(lendBook.getUser().getId())
+                .userId(lendBook.getApplicationUser().getId())
                 .returnDate(lendBook.getReturnDate())
                 .build();
     }

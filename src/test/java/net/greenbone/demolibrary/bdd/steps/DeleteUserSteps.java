@@ -9,5 +9,6 @@ public class DeleteUserSteps {
 
     @When("user tries to delete a non-existing user")
     public void userTriesToDeleteANonExistingUser() {
+
     }
 }

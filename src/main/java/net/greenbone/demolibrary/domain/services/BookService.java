@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import net.greenbone.demolibrary.adapter.persistence.BookRepository;
 import net.greenbone.demolibrary.domain.aggregates.Book;
 import net.greenbone.demolibrary.domain.services.helper.MapperDtoToEntity;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
+@Service
 @Slf4j
 public class BookService {
     private final BookRepository bookRepository;

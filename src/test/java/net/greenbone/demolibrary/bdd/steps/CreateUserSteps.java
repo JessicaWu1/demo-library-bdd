@@ -6,9 +6,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class CreateUserSteps {
-    @Given("user that tries to create a new user is of role {string}")
-    public void userThatTriesToCreateANewUserIsOfRoleADMIN() {
-    }
 
     @When("trying to create a user")
     public void tryingToCreateAUser() {

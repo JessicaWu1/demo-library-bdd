@@ -3,10 +3,10 @@ package net.greenbone.demolibrary.adapter.http;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.greenbone.demolibrary.domain.aggregates.Book;
+import net.greenbone.demolibrary.domain.services.BookService;
 import net.greenbone.demolibrary.domain.services.helper.MapperEntityToDto;
 import net.greenbone.demolibrary.representations.request.BookRequest;
 import net.greenbone.demolibrary.representations.response.BookResponse;
-import net.greenbone.demolibrary.domain.services.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +23,14 @@ public class BookRestController {
 
     private final BookService bookService;
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public BookResponse getBookById(@PathVariable Long id){
         Book book = bookService.getBookById(id);
         return MapperEntityToDto.bookToBookResponse(book);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createNewBook(@Valid @RequestBody BookRequest book){
         Book createdBook = bookService.createNewBook(book);
@@ -46,7 +46,7 @@ public class BookRestController {
                 .body("An error occurred while trying to create the new book.");
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    //@PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateBook(@PathVariable Long id, @RequestBody @Valid BookRequest book){
         if(bookService.updateBook(id, book)){
@@ -59,7 +59,7 @@ public class BookRestController {
                 .body("An error occurred trying to update the book with ID: " + id);
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    //@PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteBokWithID(@PathVariable Long id){
         Book deletedBook = bookService.deleteBookWithId(id);
