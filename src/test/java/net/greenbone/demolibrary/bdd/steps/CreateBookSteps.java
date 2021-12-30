@@ -71,6 +71,5 @@ public class CreateBookSteps {
         //is this even right??
         assertThatThrownBy(() -> bookClient.createBook(bookRequest))
                 .isInstanceOf(FeignException.class);
-
     }
 }

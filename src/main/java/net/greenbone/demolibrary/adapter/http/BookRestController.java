@@ -79,13 +79,15 @@ public class BookRestController {
         Book deletedBook = bookService.deleteBookWithId(id);
         if(deletedBook != null){
             BookResponse deletedBookResponse = MapperEntityToDto.bookToBookResponse(deletedBook);
+            Map<String, String> message = Collections.singletonMap("response","Successfully removed Book with ID: " + id);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(deletedBookResponse);
+                    .body(message);
         }
+        Map<String, String> message = Collections.singletonMap("response","An Error occurred trying to delete the book with ID: " + id);
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(Collections.singletonMap("response","An Error occurred trying to delete the book with ID: " + id));
+                .body(message);
     }
 
 }
