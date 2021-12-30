@@ -25,9 +25,20 @@ public class BookRestController {
 
     //@PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public BookResponse getBookById(@PathVariable Long id){
-        Book book = bookService.getBookById(id);
-        return MapperEntityToDto.bookToBookResponse(book);
+    public ResponseEntity getBookById(@PathVariable Long id){
+        try{
+            Book book = bookService.getBookById(id);
+            BookResponse bookResponse = MapperEntityToDto.bookToBookResponse(book);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(bookResponse);
+        }catch(NullPointerException nullPointerException){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("An error occurred while trying to retrieve book information with id: "+id);
+        }
+
+
     }
 
     //@PreAuthorize("isAuthenticated()")
