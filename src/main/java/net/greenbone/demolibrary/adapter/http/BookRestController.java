@@ -14,6 +14,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collections;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,7 +27,7 @@ public class BookRestController {
 
     //@PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getBookById(@PathVariable Long id){
+    public ResponseEntity<Object> getBookById(@PathVariable Long id){
         try{
             Book book = bookService.getBookById(id);
             BookResponse bookResponse = MapperEntityToDto.bookToBookResponse(book);
@@ -33,46 +35,47 @@ public class BookRestController {
                     .status(HttpStatus.OK)
                     .body(bookResponse);
         }catch(NullPointerException nullPointerException){
+            Map<String, String> message = Collections.singletonMap("response","An error occurred while trying to retrieve book information with id: "+id);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body("An error occurred while trying to retrieve book information with id: "+id);
+                    .body(message);
         }
-
-
     }
 
     //@PreAuthorize("isAuthenticated()")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity createNewBook(@Valid @RequestBody BookRequest book){
+    public ResponseEntity<Object> createNewBook(@Valid @RequestBody BookRequest book){
         Book createdBook = bookService.createNewBook(book);
         if(createdBook != null){
-            log.info("createdBook not null");
             BookResponse createdBookResponse = MapperEntityToDto.bookToBookResponse(createdBook);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(createdBookResponse);
         }
+        Map<String, String> message = Collections.singletonMap("response","An error occurred while trying to create the new book.");
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("An error occurred while trying to create the new book.");
+                .body(message);
     }
 
     //@PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity updateBook(@PathVariable Long id, @RequestBody @Valid BookRequest book){
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> updateBook(@PathVariable Long id, @RequestBody @Valid BookRequest book){
         if(bookService.updateBook(id, book)){
+            Map<String, String> message = Collections.singletonMap("response","Successfully updated Book with ID: " + id);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body("Successfully updated Book with ID: " + id);
+                    .body(message);
         }
+        Map<String, String> message = Collections.singletonMap("response","An error occurred trying to update the book with ID: " + id);
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body("An error occurred trying to update the book with ID: " + id);
+                .body(message);
     }
 
     //@PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity deleteBokWithID(@PathVariable Long id){
+    public ResponseEntity<Object> deleteBokWithID(@PathVariable Long id){
         Book deletedBook = bookService.deleteBookWithId(id);
         if(deletedBook != null){
             BookResponse deletedBookResponse = MapperEntityToDto.bookToBookResponse(deletedBook);
@@ -82,7 +85,7 @@ public class BookRestController {
         }
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body("An Error occurred trying to delete the book with ID: " + id);
+                .body(Collections.singletonMap("response","An Error occurred trying to delete the book with ID: " + id));
     }
 
 }

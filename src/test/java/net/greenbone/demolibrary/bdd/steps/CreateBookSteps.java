@@ -39,7 +39,7 @@ public class CreateBookSteps {
         bookResponse =  bookClient.createBook(bookRequest);
     }
 
-    @And("the created book information is shown")
+    @And("the book information is shown")
     public void theCreatedBookInformationIsShown() {
         assertNotNull(bookResponse);
         assertThat(bookResponse.getAuthor(), Matchers.is(bookRequest.getAuthor()));

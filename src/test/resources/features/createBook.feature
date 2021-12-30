@@ -4,7 +4,7 @@ Feature: create a new Book
     Given user is of role "ADMIN"
     And user is logged in
     When user creates a new book with the needed information
-    Then the created book information is shown
+    Then the book information is shown
 
   Scenario: Book without a name
     Given user is of role "ADMIN"
