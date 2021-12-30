@@ -18,15 +18,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -81,7 +79,8 @@ public class BookRestControllerTest {
     public void expect_getBookById_toReturn() throws Exception {
         when(this.bookService.getBookById(anyLong()))
                 .thenReturn(book); //any(), any(klasse) 1x in der methode für den aufruf, dann müssen alle any sein oder eq
-        this.mockMvc.perform(get("/book/1"))
+        this.mockMvc.perform(
+                        get("/book/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1")); //$[0].id
     }
@@ -91,19 +90,35 @@ public class BookRestControllerTest {
     public void expect_createNewBook_toReturn() throws Exception {
         when(this.bookService.createNewBook(any(Book.Create.class)))
                 .thenReturn(book); //any(), any(klasse) 1x in der methode für den aufruf, dann müssen alle any sein oder eq
-        this.mockMvc.perform(post("/book")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON_VALUE)
-                        .content(bookRequestJson))
+        this.mockMvc.perform(
+                        post("/book")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(bookRequestJson))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("1"));
     }
 
     @Test
-    public void expect_updateBook_toReturn() {
+    public void expect_updateBook_toReturn() throws Exception {
+        when(this.bookService.updateBook(anyLong(), any(Book.Update.class)))
+                .thenReturn(true);
+        this.mockMvc.perform(
+                        put("/book/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(bookRequestJson))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void expect_deleteBokWithID_toReturn() {
+    public void expect_deleteBokWithID_toReturn() throws Exception {
+        when(this.bookService.deleteBookWithId(anyLong()))
+                .thenReturn(book);
+        this.mockMvc.perform(
+                        delete("/book/1")
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("1"));
     }
+
 }
