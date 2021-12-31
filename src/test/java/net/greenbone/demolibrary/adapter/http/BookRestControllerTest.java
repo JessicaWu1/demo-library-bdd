@@ -106,6 +106,7 @@ public class BookRestControllerTest {
         this.mockMvc.perform(
                         put("/book/1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
                                 .content(bookRequestJson))
                 .andExpect(status().isOk());
     }

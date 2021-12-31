@@ -31,9 +31,7 @@ public class UserRequest implements ApplicationUser.Create, ApplicationUser.Upda
     @NotNull(message = "User role required.")
     private String role;
 
-    @NotNull(message = "Late Fees instance required")
     private Float lateFees;
-
     private List<LendBook> borrowedBooks;
 
 }

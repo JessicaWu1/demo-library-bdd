@@ -18,6 +18,7 @@ import java.util.List;
 public class ApplicationUser {
     @Id
     @GeneratedValue
+    @Setter
     private Long id;
 
     @NotEmpty(message = "Name is not specified")

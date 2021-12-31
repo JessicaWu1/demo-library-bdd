@@ -10,19 +10,21 @@ import net.greenbone.demolibrary.representations.response.UserResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.Map;
 
+@RequestMapping("/user")
 @RequiredArgsConstructor
 @RestController
 @Slf4j
 public class ApplicationUserRestController {
     private final ApplicationUserService applicationUserService;
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getUserById(@PathVariable Long id){
         try{
@@ -39,7 +41,7 @@ public class ApplicationUserRestController {
         }
     }
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> createNewUser(@Valid @RequestBody UserRequest user){
         ApplicationUser createdUser = applicationUserService.createNewUser(user);
@@ -55,7 +57,7 @@ public class ApplicationUserRestController {
                 .body(message);
     }
 
-    //@PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest user){
         if(applicationUserService.updateUser(id, user)){
@@ -70,7 +72,7 @@ public class ApplicationUserRestController {
                 .body(message);
     }
 
-    //@PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> deleteUserWithID(@PathVariable Long id){
         ApplicationUser deletedUser = applicationUserService.deleteUserWithId(id);
