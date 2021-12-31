@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -37,11 +39,13 @@ public class ApplicationUserServiceTest {
 
     @Before
     public void setUp(){
+        List<Long> borrowedBooks = new ArrayList<>();
         userRequest = UserRequest.builder()
                 .name("Toller Name")
                 .email("maxmustermann@example.com")
                 .password("password")
                 .role("ADMIN")
+                //.borrowedBooks(borrowedBooks)
                 .build();
     }
 

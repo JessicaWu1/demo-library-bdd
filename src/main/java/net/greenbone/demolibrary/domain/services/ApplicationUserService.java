@@ -28,11 +28,15 @@ public class ApplicationUserService {
     @Transactional
     public ApplicationUser createNewUser(ApplicationUser.Create user){
         ApplicationUser newUser;
-        if(user.getBorrowedBooks() != null || !user.getBorrowedBooks().isEmpty()){
-            List<LendBook> borrowedBooks = lendBookRepository.findAllById(user.getBorrowedBooks());
-            newUser = ApplicationUser.fromCreate(user, borrowedBooks);
+        if(user.getBorrowedBooks() != null){
+            if(!user.getBorrowedBooks().isEmpty()) {
+                List<LendBook> borrowedBooks = lendBookRepository.findAllById(user.getBorrowedBooks());
+                newUser = ApplicationUser.fromCreate(user, borrowedBooks);
+            }else{
+                newUser = ApplicationUser.fromCreate(user, null);
+            }
         }else{
-            newUser = ApplicationUser.fromCreate(user, null);
+            newUser = ApplicationUser.fromCreateWithoutBorrowedBooks(user);
         }
         ApplicationUser createdNewUser = applicationUserRepository.save(newUser);
         return createdNewUser;
