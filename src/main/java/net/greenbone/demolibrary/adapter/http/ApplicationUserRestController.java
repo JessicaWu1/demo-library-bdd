@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -26,20 +27,11 @@ public class ApplicationUserRestController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> getUserById(@PathVariable Long id){
+    public UserResponse getUserById(@PathVariable Long id){
         ApplicationUser applicationUser = applicationUserService.getUserById(id);
 
-        if(applicationUser == null) {
-            Map<String, String> message = Collections.singletonMap("response", "An error occurred while trying to retrieve user information for user with id: " + id);
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(message);
-        }
-
-        UserResponse userResponse = MapperEntityToDto.applicationUserToUserResponse(applicationUser);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(userResponse);
+        UserResponse userResponse = UserResponse.applicationUserToUserResponse(applicationUser);
+        return userResponse;
     }
 
     @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
@@ -54,7 +46,7 @@ public class ApplicationUserRestController {
                     .body(message);
         }
 
-        UserResponse createdUserResponse = MapperEntityToDto.applicationUserToUserResponse(createdUser);
+        UserResponse createdUserResponse = UserResponse.applicationUserToUserResponse(createdUser);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(createdUserResponse);
@@ -62,34 +54,25 @@ public class ApplicationUserRestController {
 
     @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, String>> updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest user){
-        if(applicationUserService.updateUser(id, user)){
-            Map<String, String> message = Collections.singletonMap("response","Successfully updated User with ID: " + id);
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(message);
-        }
-        Map<String, String> message = Collections.singletonMap("response","An error occurred trying to update the user with ID: " + id);
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(message);
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest user){
+        applicationUserService.updateUser(id, user);
     }
 
     @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> deleteUserWithID(@PathVariable Long id){
-        ApplicationUser deletedUser = applicationUserService.deleteUserWithId(id);
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUserWithID(@PathVariable Long id){
+        applicationUserService.deleteUserWithId(id);
+    }
 
-        if(deletedUser == null){
-            Map<String, String> message = Collections.singletonMap("response","An Error occurred trying to delete the user with ID: " + id);
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(message);
-        }
-
-        Map<String, String> message = Collections.singletonMap("response","Successfully removed User with ID: " + id);
+    //exceptions, die bis zum controller gereicht werden, werden hier behandelt -> try catch aus den services raus und hier die überprüfungen auch
+    @ExceptionHandler({NoSuchElementException.class, NullPointerException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Map<String,String>> handle(Exception exception){
+        Map<String, String> message = Collections.singletonMap("response", exception.getMessage());
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.NOT_FOUND)
                 .body(message);
     }
 }

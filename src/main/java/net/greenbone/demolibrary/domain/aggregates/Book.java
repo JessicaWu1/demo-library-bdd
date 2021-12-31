@@ -13,8 +13,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Book {
     @Id
     @GeneratedValue
@@ -23,34 +21,56 @@ public class Book {
 
     @NotNull(message = "Title required.")
     @NotEmpty(message = "Title is not specified.")
-    @Setter
     private String title;
 
     @NotNull(message = "Author required.")
     @NotEmpty(message = "Author not specified.")
-    @Setter
     private String author;
 
     @NotNull(message = "Publisher required.")
     @NotEmpty(message = "Publisher is empty.")
-    @Setter
     private String publisher;
 
     @NotNull(message = "Description required.")
     @NotEmpty(message = "Description not specified.")
-    @Setter
     private String description;
 
     @NotNull(message = "Published Year is required.")
-    @Setter
     private Integer publishingYear;
 
     @NotNull(message = "Quantity is required.")
-    @Setter
     private Integer quantity;
 
+    @Builder
+    private Book(Long id, String title, String author, String publisher, String description, Integer publishingYear, Integer quantity) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.publisher = publisher;
+        this.description = description;
+        this.publishingYear = publishingYear;
+        this.quantity = quantity;
+    }
 
+    public static Book fromCreate(Book.Create book){
+        return Book.builder()
+                .author(book.getAuthor())
+                .title(book.getTitle())
+                .description(book.getDescription())
+                .publisher(book.getPublisher())
+                .quantity(book.getQuantity())
+                .publishingYear(book.getPublishingYear())
+                .build();
+    }
 
+    public void fromUpdate(Book.Update book){
+        this.author = book.getAuthor();
+        this.description = book.getDescription();
+        this.publisher = book.getPublisher();
+        this.quantity = book.getQuantity();
+        this.title = book.getTitle();
+        this.publishingYear = book.getPublishingYear();
+    }
     public interface Create {
 
         String getAuthor();

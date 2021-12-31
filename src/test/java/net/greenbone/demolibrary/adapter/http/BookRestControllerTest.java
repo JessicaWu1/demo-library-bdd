@@ -101,8 +101,6 @@ public class BookRestControllerTest {
 
     @Test
     public void expect_updateBook_toReturn() throws Exception {
-        when(this.bookService.updateBook(anyLong(), any(Book.Update.class)))
-                .thenReturn(true);
         this.mockMvc.perform(
                         put("/book/1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -113,13 +111,10 @@ public class BookRestControllerTest {
 
     @Test
     public void expect_deleteBokWithID_toReturn() throws Exception {
-        when(this.bookService.deleteBookWithId(anyLong()))
-                .thenReturn(book);
         this.mockMvc.perform(
                         delete("/book/1")
                                 .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("1"));
+                .andExpect(status().isOk());
     }
 
 }

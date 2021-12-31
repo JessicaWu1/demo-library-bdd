@@ -8,4 +8,4 @@ Feature: reading user information
   Scenario: user tries to read user information from a non-existing user
     Given user is logged in
     When user tries to read a non-existing user information
-    Then a Not Found Exception is thrown
+    Then a Null Pointer Exception is thrown

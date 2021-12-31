@@ -10,4 +10,4 @@ Feature: deleting a user
     Given user is logged in
     And user is of role "ADMIN"
     When user tries to delete a non-existing user
-    Then the user gets a Not Found Exception
+    Then the user receives a Not Found Exception

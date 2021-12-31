@@ -32,6 +32,6 @@ public class UserRequest implements ApplicationUser.Create, ApplicationUser.Upda
     private String role;
 
     private Float lateFees;
-    private List<LendBook> borrowedBooks;
+    private List<Long> borrowedBooks;
 
 }

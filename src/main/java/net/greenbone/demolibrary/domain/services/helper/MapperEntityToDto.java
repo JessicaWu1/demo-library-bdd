@@ -11,17 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MapperEntityToDto {
-    public static BookResponse bookToBookResponse(Book book){
-        return BookResponse.builder()
-                .author(book.getAuthor())
-                .description(book.getDescription())
-                .id(book.getId())
-                .publisher(book.getPublisher())
-                .publishingYear(book.getPublishingYear())
-                .quantity(book.getQuantity())
-                .title(book.getTitle())
-                .build();
-    }
 
     public static LendBookResponse lendBookToLendBookResponse(LendBook lendBook){
         return LendBookResponse.builder()
@@ -29,22 +18,6 @@ public class MapperEntityToDto {
                 .id(lendBook.getId())
                 .userId(lendBook.getApplicationUser().getId())
                 .returnDate(lendBook.getReturnDate())
-                .build();
-    }
-
-    public static UserResponse applicationUserToUserResponse(ApplicationUser applicationUser) {
-        List<LendBookResponse> borrowedBooks = applicationUser.getBorrowedBooks()
-                .stream()
-                .map(MapperEntityToDto::lendBookToLendBookResponse)
-                .collect(Collectors.toList());
-        return UserResponse.builder()
-                .id(applicationUser.getId())
-                .name(applicationUser.getName())
-                .borrowedBooks(borrowedBooks)
-                .password(applicationUser.getPassword())
-                .lateFees(applicationUser.getLateFees())
-                .email(applicationUser.getEmail())
-                .role(applicationUser.getRole().name())
                 .build();
     }
 }

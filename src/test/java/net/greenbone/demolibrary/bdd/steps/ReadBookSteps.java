@@ -11,6 +11,8 @@ import net.greenbone.demolibrary.representations.response.BookResponse;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -19,6 +21,7 @@ public class ReadBookSteps {
 
     private BookResponse bookResponse;
     private BookClient bookClient;
+    Map<String ,String> message;
 
     @Before
     public void setUp(){
@@ -30,10 +33,6 @@ public class ReadBookSteps {
 
     @When("user tries to read book information")
     public void userTriesToReadBookInformation() {
-        Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
-                .decoder(new GsonDecoder())
-                .encoder(new GsonEncoder());
-        BookClient bookClient = encoder.target(BookClient.class, "http://localhost:8081");
         bookResponse =  bookClient.getBookById(1L);
     }
 
@@ -45,7 +44,6 @@ public class ReadBookSteps {
 
     @When("user tries to read non-existing book information")
     public void userTriesToReadNonExistingBookInformation() {
-
     }
 
     @Then("the user gets a Null Pointer Exception")

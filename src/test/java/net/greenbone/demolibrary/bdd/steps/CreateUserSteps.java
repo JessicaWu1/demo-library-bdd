@@ -12,13 +12,14 @@ import net.greenbone.demolibrary.bdd.helper.adapter.http.client.BookClient;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.client.UserClient;
 import net.greenbone.demolibrary.representations.request.UserRequest;
 import net.greenbone.demolibrary.representations.response.UserResponse;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
+import static org.junit.Assert.*;
 
 public class CreateUserSteps {
 
@@ -57,7 +58,7 @@ public class CreateUserSteps {
         assertThat(userRequest.getName(), Matchers.is(userResponse.getName()));
         assertThat(userRequest.getPassword(), Matchers.is(userResponse.getPassword()));
         assertThat(userRequest.getRole(), Matchers.is(userResponse.getRole()));
-        assertThat(0.0F, Matchers.is(userResponse.getLateFees()));
+        assertEquals(0.0F, userResponse.getLateFees(), 0.3F);
         assertThat(new ArrayList<>(), Matchers.is(userResponse.getBorrowedBooks()));
     }
 

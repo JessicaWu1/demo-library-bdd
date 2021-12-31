@@ -3,63 +3,53 @@ package net.greenbone.demolibrary.domain.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.greenbone.demolibrary.adapter.persistence.ApplicationUserRepository;
+import net.greenbone.demolibrary.adapter.persistence.LendBookRepository;
 import net.greenbone.demolibrary.domain.aggregates.ApplicationUser;
-import net.greenbone.demolibrary.domain.enums.Role;
+import net.greenbone.demolibrary.domain.aggregates.LendBook;
 import net.greenbone.demolibrary.domain.services.helper.MapperDtoToEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class ApplicationUserService {
     private final ApplicationUserRepository applicationUserRepository;
-
+    private final LendBookRepository lendBookRepository;
+    @Transactional
     public ApplicationUser getUserById(Long id){
-        try{
-            return applicationUserRepository.findById(id).get();
-        }catch(NullPointerException nullPointerException){
-            return null;
-        }
+        return applicationUserRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find Object with ID: " + id.toString()));
     }
 
+    @Transactional
     public ApplicationUser createNewUser(ApplicationUser.Create user){
-        try{
-            ApplicationUser newUser = MapperDtoToEntity.userRequestToUser(user);
-            ApplicationUser createdNewUser = applicationUserRepository.save(newUser);
-            return createdNewUser;
-        }catch(Exception e){
-            log.error(e.getMessage(), e.getStackTrace());
-            return null;
+        ApplicationUser newUser;
+        if(user.getBorrowedBooks() != null || !user.getBorrowedBooks().isEmpty()){
+            List<LendBook> borrowedBooks = lendBookRepository.findAllById(user.getBorrowedBooks());
+            newUser = ApplicationUser.fromCreate(user, borrowedBooks);
+        }else{
+            newUser = ApplicationUser.fromCreate(user, null);
         }
+        ApplicationUser createdNewUser = applicationUserRepository.save(newUser);
+        return createdNewUser;
     }
 
-    public boolean updateUser(Long id, ApplicationUser.Update user){
-        try{
-            ApplicationUser toUpdate = applicationUserRepository.findById(id).get();
-
-            toUpdate.setEmail(user.getEmail());
-            toUpdate.setLateFees(user.getLateFees());
-            toUpdate.setPassword(user.getPassword());
-            toUpdate.setBorrowedBooks(user.getBorrowedBooks());
-            toUpdate.setName(user.getName());
-            toUpdate.setRole(Role.valueOf(user.getRole()));
-
-            applicationUserRepository.save(toUpdate);
-            return true;
-        }catch(Exception e){
-            log.error(e.getMessage(), e.getStackTrace());
-            return false;
-        }
+    @Transactional
+    public void updateUser(Long id, ApplicationUser.Update user){
+            //string formatting
+        ApplicationUser toUpdate = applicationUserRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Could not find Object with ID: " + id.toString()));
+        List<LendBook> borrowedBooks = lendBookRepository.findAllById(user.getBorrowedBooks());
+        toUpdate.fromUpdate(user, borrowedBooks);
+        applicationUserRepository.save(toUpdate);
     }
 
-    public ApplicationUser deleteUserWithId(Long id){
-        try{
-            ApplicationUser deletedBook = applicationUserRepository.findById(id).get();
-            applicationUserRepository.deleteById(id);
-            return deletedBook;
-        }catch(Exception e){
-            log.error(e.getMessage(), e.getStackTrace());
-            return null;
-        }
+    @Transactional
+    public void deleteUserWithId(Long id){
+        applicationUserRepository.deleteById(id);
     }
 }

@@ -7,9 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
 public class LendBook {
     @Id
@@ -18,19 +16,21 @@ public class LendBook {
 
     @NotNull(message = "No borrowing user specified. User is required.")
     @ManyToOne
-    //@JoinColumn(name = "user_id")
-    @Setter
+    @JoinColumn(name = "user_id")
     private ApplicationUser applicationUser;
 
     @NotNull(message = "No Book specified. Book is required.")
-    @ManyToOne
-    //@JoinColumn(name = "book_id")
-    @Setter
+    @OneToOne
+    @JoinColumn(name = "book_id")
     private Book book;
 
-    @Setter
     @NotNull(message = "No returnDate, but it is required.")
     private LocalDate returnDate;
 
-
+    @Builder
+    private LendBook(ApplicationUser applicationUser, Book book, LocalDate returnDate) {
+        this.applicationUser = applicationUser;
+        this.book = book;
+        this.returnDate = returnDate;
+    }
 }
