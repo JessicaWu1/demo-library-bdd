@@ -27,34 +27,37 @@ public class ApplicationUserRestController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getUserById(@PathVariable Long id){
-        try{
-            ApplicationUser applicationUser = applicationUserService.getUserById(id);
-            UserResponse userResponse = MapperEntityToDto.applicationUserToUserResponse(applicationUser);
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(userResponse);
-        }catch(NullPointerException nullPointerException){
-            Map<String, String> message = Collections.singletonMap("response","An error occurred while trying to retrieve user information for user with id: "+id);
+        ApplicationUser applicationUser = applicationUserService.getUserById(id);
+
+        if(applicationUser == null) {
+            Map<String, String> message = Collections.singletonMap("response", "An error occurred while trying to retrieve user information for user with id: " + id);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(message);
         }
+
+        UserResponse userResponse = MapperEntityToDto.applicationUserToUserResponse(applicationUser);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userResponse);
     }
 
     @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> createNewUser(@Valid @RequestBody UserRequest user){
         ApplicationUser createdUser = applicationUserService.createNewUser(user);
-        if(createdUser != null){
-            UserResponse createdUserResponse = MapperEntityToDto.applicationUserToUserResponse(createdUser);
+
+        if(createdUser == null){
+            Map<String, String> message = Collections.singletonMap("response","An error occurred while trying to create the new user.");
             return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(createdUserResponse);
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(message);
         }
-        Map<String, String> message = Collections.singletonMap("response","An error occurred while trying to create the new user.");
+
+        UserResponse createdUserResponse = MapperEntityToDto.applicationUserToUserResponse(createdUser);
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(message);
+                .status(HttpStatus.CREATED)
+                .body(createdUserResponse);
     }
 
     @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
@@ -76,15 +79,17 @@ public class ApplicationUserRestController {
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> deleteUserWithID(@PathVariable Long id){
         ApplicationUser deletedUser = applicationUserService.deleteUserWithId(id);
-        if(deletedUser != null){
-            Map<String, String> message = Collections.singletonMap("response","Successfully removed User with ID: " + id);
+
+        if(deletedUser == null){
+            Map<String, String> message = Collections.singletonMap("response","An Error occurred trying to delete the user with ID: " + id);
             return ResponseEntity
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.NOT_FOUND)
                     .body(message);
         }
-        Map<String, String> message = Collections.singletonMap("response","An Error occurred trying to delete the user with ID: " + id);
+
+        Map<String, String> message = Collections.singletonMap("response","Successfully removed User with ID: " + id);
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.OK)
                 .body(message);
     }
 }

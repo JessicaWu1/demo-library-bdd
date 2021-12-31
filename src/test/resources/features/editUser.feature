@@ -3,9 +3,9 @@ Feature: edit user
   Scenario: trying to edit user information (credentials, name etc.)
     Given user is logged in
     When user tries to edit a specified user information
-    Then status code 200 is returned
+    Then a success message is shown
 
   Scenario: user tries to edit a non-existing user
     Given user is logged in
     When user tries to edit user information from a non-existing user
-    Then status code 404 is returned
+    Then the user gets a Not Found Exception

@@ -16,8 +16,8 @@ public class BookService {
     public Book getBookById(Long id) {
         try{
             return bookRepository.findById(id).get();
-        } catch (Exception e){
-            log.error(e.getMessage(), e.getStackTrace());
+        } catch (NullPointerException nullPointerException){
+            log.error(nullPointerException.getMessage(), nullPointerException.getStackTrace());
             return null;
         }
     }

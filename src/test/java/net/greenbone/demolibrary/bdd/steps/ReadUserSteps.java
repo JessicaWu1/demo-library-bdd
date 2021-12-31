@@ -16,4 +16,8 @@ public class ReadUserSteps {
     public void userTriesToReadANonExistingUserInformation() {
     }
 
+    @Then("a Not Found Exception is thrown")
+    public void aNotFoundExceptionIsThrown() {
+
+    }
 }
