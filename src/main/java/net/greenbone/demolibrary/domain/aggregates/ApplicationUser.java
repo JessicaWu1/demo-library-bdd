@@ -42,7 +42,8 @@ public class ApplicationUser {
     private List<LendBook> borrowedBooks;
 
     @Builder
-    private ApplicationUser(String name, String email, String password, Role role, Float lateFees, List<LendBook> borrowedBooks) {
+    private ApplicationUser(Long id, String name, String email, String password, Role role, Float lateFees, List<LendBook> borrowedBooks) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;

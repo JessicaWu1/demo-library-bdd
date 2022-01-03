@@ -10,5 +10,5 @@ Feature: delete Book
     Given user is logged in
     And user is of role "ADMIN"
     When user tries to delete a non-existing book
-    Then the user gets a NotFound Exception
+    Then the user gets a Not Found Exception
 

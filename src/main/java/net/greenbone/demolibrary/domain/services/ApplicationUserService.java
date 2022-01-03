@@ -6,7 +6,6 @@ import net.greenbone.demolibrary.adapter.persistence.ApplicationUserRepository;
 import net.greenbone.demolibrary.adapter.persistence.LendBookRepository;
 import net.greenbone.demolibrary.domain.aggregates.ApplicationUser;
 import net.greenbone.demolibrary.domain.aggregates.LendBook;
-import net.greenbone.demolibrary.domain.services.helper.MapperDtoToEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

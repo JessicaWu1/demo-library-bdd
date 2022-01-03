@@ -47,4 +47,10 @@ public class LoginAndPermissionsSteps {
         assertEquals(applicationUser.getRole().name().toLowerCase(), role.toLowerCase());
         log.info("user is of role ADMIN");
     }
+
+    @Given("admin is logged in")
+    public void adminIsLoggedIn() {
+        this.login(applicationUser.getEmail(), applicationUser.getPassword());
+        this.userIsOfRole("ADMIN");
+    }
 }

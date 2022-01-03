@@ -1,18 +1,29 @@
 package net.greenbone.demolibrary.representations.request;
 
 import lombok.*;
+import net.greenbone.demolibrary.domain.aggregates.LendBook;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LendBookRequest {
+@Getter
+public class LendBookRequest implements LendBook.Create, LendBook.Update {
     @NotNull(message = "No borrowing user specified. User is required.")
     private Long userId;
 
     @NotNull(message = "No Book specified. Book is required.")
     private Long bookId;
+
+    @NotNull(message = "A return Date is required.")
+    private Date returnDate;
+    private boolean returned;
+
+    @Override
+    public boolean getReturned() {
+        return returned;
+    }
 }

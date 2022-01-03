@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.greenbone.demolibrary.adapter.persistence.BookRepository;
 import net.greenbone.demolibrary.domain.aggregates.Book;
-import net.greenbone.demolibrary.domain.services.helper.MapperDtoToEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
@@ -40,4 +40,7 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
+    public List<Book> getBooks() {
+        return bookRepository.findAll();
+    }
 }

@@ -41,7 +41,7 @@ public class EditBookSteps {
                 .quantity(2)
                 .build();
 
-        userContext.getFeignClient(BookClient.class).updateBook(1L, bookRequest);
+        userContext.setResponseStatusCode(userContext.getFeignClient(BookClient.class).updateBook(1L, bookRequest).status());
     }
 
     @When("user tries to edit a non-existing book")

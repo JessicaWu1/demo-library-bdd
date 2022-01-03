@@ -8,4 +8,4 @@ Feature: reading information of a book
   Scenario: user tries to read non-existing book information
     Given user is logged in
     When user tries to read non-existing book information
-    Then the user gets a Null Pointer Exception
+    Then the user gets a Not Found Exception

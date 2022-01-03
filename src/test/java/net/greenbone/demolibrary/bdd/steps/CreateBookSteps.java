@@ -36,9 +36,6 @@ public class CreateBookSteps {
                 .publishingYear(2015)
                 .quantity(1)
                 .build();
-        Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
-                .decoder(new GsonDecoder())
-                .encoder(new GsonEncoder());
         bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest);
     }
 

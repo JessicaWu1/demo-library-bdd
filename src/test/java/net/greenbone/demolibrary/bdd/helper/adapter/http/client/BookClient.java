@@ -1,13 +1,11 @@
 package net.greenbone.demolibrary.bdd.helper.adapter.http.client;
 
-import feign.Body;
-import feign.Headers;
-import feign.Param;
-import feign.RequestLine;
+import feign.*;
 import net.greenbone.demolibrary.representations.request.BookRequest;
 import net.greenbone.demolibrary.representations.response.BookResponse;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 @Headers("Content-Type: application/json")
@@ -18,9 +16,12 @@ public interface BookClient {
     @RequestLine("GET /book/{id}")
     BookResponse getBookById(@Param("id") Long id);
 
+    @RequestLine("GET /book")
+    List<BookResponse> getBooks();
+
     @RequestLine("PUT /book/{id}")
-    void updateBook(@Param("id") Long id, BookRequest bookRequest);
+    Response updateBook(@Param("id") Long id, BookRequest bookRequest);
 
     @RequestLine("DELETE /book/{id}")
-    void deleteBook(@Param("id") Long id);
+    Response deleteBook(@Param("id") Long id);
 }

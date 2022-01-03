@@ -6,6 +6,8 @@ import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import lombok.RequiredArgsConstructor;
+import net.greenbone.demolibrary.bdd.helper.adapter.context.UserContext;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.client.BookClient;
 import net.greenbone.demolibrary.representations.response.BookResponse;
 import org.hamcrest.Matchers;
@@ -17,23 +19,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
+@RequiredArgsConstructor
 public class ReadBookSteps {
 
-    private BookResponse bookResponse;
-    private BookClient bookClient;
-    Map<String ,String> message;
+    private final UserContext userContext;
 
-    @Before
-    public void setUp(){
-        Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
-                .decoder(new GsonDecoder())
-                .encoder(new GsonEncoder());
-        bookClient = encoder.target(BookClient.class, "http://localhost:8081");
-    }
+    private BookResponse bookResponse;
+
 
     @When("user tries to read book information")
     public void userTriesToReadBookInformation() {
-        bookResponse =  bookClient.getBookById(1L);
+        bookResponse =  userContext.getFeignClient(BookClient.class).getBookById(1L);
     }
 
     @Then("the information is shown")
@@ -44,12 +40,10 @@ public class ReadBookSteps {
 
     @When("user tries to read non-existing book information")
     public void userTriesToReadNonExistingBookInformation() {
-    }
-
-    @Then("the user gets a Null Pointer Exception")
-    public void theUserGetsANullPointerException() {
-        //is this even right??
-        assertThatThrownBy(() -> bookClient.getBookById(3L))
-                .isInstanceOf(NullPointerException.class);
+        try{
+            bookResponse = userContext.getFeignClient(BookClient.class).getBookById(3L);
+        }catch(Exception e){
+            userContext.setResponse(e);
+        }
     }
 }

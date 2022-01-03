@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.greenbone.demolibrary.domain.aggregates.ApplicationUser;
 import net.greenbone.demolibrary.domain.services.ApplicationUserService;
-import net.greenbone.demolibrary.domain.services.helper.MapperEntityToDto;
 import net.greenbone.demolibrary.representations.request.UserRequest;
 import net.greenbone.demolibrary.representations.response.UserResponse;
 import org.springframework.http.HttpStatus;
@@ -36,20 +35,11 @@ public class ApplicationUserRestController {
 
     @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> createNewUser(@Valid @RequestBody UserRequest user){
+    public UserResponse createNewUser(@Valid @RequestBody UserRequest user){
         ApplicationUser createdUser = applicationUserService.createNewUser(user);
 
-        if(createdUser == null){
-            Map<String, String> message = Collections.singletonMap("response","An error occurred while trying to create the new user.");
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(message);
-        }
-
         UserResponse createdUserResponse = UserResponse.applicationUserToUserResponse(createdUser);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(createdUserResponse);
+        return createdUserResponse;
     }
 
     @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
@@ -67,12 +57,19 @@ public class ApplicationUserRestController {
     }
 
     //exceptions, die bis zum controller gereicht werden, werden hier behandelt -> try catch aus den services raus und hier die überprüfungen auch
-    @ExceptionHandler({NoSuchElementException.class, NullPointerException.class})
+    @ExceptionHandler({NoSuchElementException.class, NullPointerException.class, Exception.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Map<String,String>> handle(Exception exception){
         Map<String, String> message = Collections.singletonMap("response", exception.getMessage());
+
+        if(exception instanceof NoSuchElementException || exception instanceof NullPointerException){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(message);
+        }
+
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(message);
     }
 }

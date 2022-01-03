@@ -8,6 +8,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import lombok.RequiredArgsConstructor;
+import net.greenbone.demolibrary.bdd.helper.adapter.context.UserContext;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.client.BookClient;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.client.UserClient;
 import net.greenbone.demolibrary.representations.request.UserRequest;
@@ -21,7 +23,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.*;
 
+@RequiredArgsConstructor
 public class CreateUserSteps {
+
+    private final UserContext userContext;
 
     private UserResponse userResponse;
     private UserRequest userRequest;
@@ -35,11 +40,7 @@ public class CreateUserSteps {
                 .role("ADMIN")
                 .build();
 
-        Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
-                .decoder(new GsonDecoder())
-                .encoder(new GsonEncoder());
-        UserClient userClient = encoder.target(UserClient.class, "http://localhost:8081");
-        userResponse =  userClient.createUser(userRequest);
+        userResponse =  userContext.getFeignClient(UserClient.class).createUser(userRequest);
     }
 
     @When("trying to create a user without an initial password")
@@ -49,6 +50,11 @@ public class CreateUserSteps {
                 .email("maxmustermann@gmail.com")
                 .role("ADMIN")
                 .build();
+        try{
+            userResponse =  userContext.getFeignClient(UserClient.class).createUser(userRequest);
+        }catch(Exception e){
+            userContext.setResponse(e);
+        }
     }
 
     @Then("the created user information is shown")
