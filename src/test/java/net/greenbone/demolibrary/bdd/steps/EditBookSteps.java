@@ -7,7 +7,9 @@ import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.greenbone.demolibrary.bdd.helper.adapter.context.UserContext;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.client.BookClient;
 import net.greenbone.demolibrary.representations.request.BookRequest;
 import net.greenbone.demolibrary.representations.response.BookResponse;
@@ -19,17 +21,14 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 @Slf4j
+@RequiredArgsConstructor
 public class EditBookSteps {
 
+    private final UserContext userContext;
     private BookRequest bookRequest;
-    private Map<String,String> message;
-    @Before
-    public void setUp(){
-    }
 
     @When("user edits something in an existing book")
     public void userEditsSomethingInAnExistingBook() {
@@ -42,11 +41,7 @@ public class EditBookSteps {
                 .quantity(2)
                 .build();
 
-        Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
-                .decoder(new GsonDecoder())
-                .encoder(new GsonEncoder());
-        BookClient bookClient = encoder.target(BookClient.class, "http://localhost:8081");
-        message = bookClient.updateBook(1L, bookRequest);
+        userContext.getFeignClient(BookClient.class).updateBook(1L, bookRequest);
     }
 
     @When("user tries to edit a non-existing book")
@@ -59,22 +54,20 @@ public class EditBookSteps {
                 .publishingYear(2015)
                 .quantity(2)
                 .build();
+        try{
+            userContext.getFeignClient(BookClient.class).updateBook(3L, bookRequest);
+        }catch(Exception e){
+            userContext.setResponse(e);
+        }
     }
 
     @Then("a success message is received")
     public void aSuccessMessageIsReceived() {
-        assertNotNull(message);
-        assertThat(message.get("response"), Matchers.is("Successfully updated Book with ID: 1" ));
+        assertEquals(userContext.getResponseStatusCode().intValue(), 200);
     }
 
     @Then("the user gets a Not Found Exception")
     public void theUserGetsANotFoundException() {
-        Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
-                .decoder(new GsonDecoder())
-                .encoder(new GsonEncoder());
-        BookClient bookClient = encoder.target(BookClient.class, "http://localhost:8081");
-
-        assertThatThrownBy(() -> bookClient.updateBook(3L, bookRequest))
-                .isInstanceOf(FeignException.class);
+        assertEquals(userContext.getResponseStatusCode().intValue(), 404);
     }
 }

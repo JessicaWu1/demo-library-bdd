@@ -6,36 +6,32 @@ import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import lombok.RequiredArgsConstructor;
+import net.greenbone.demolibrary.bdd.helper.adapter.context.UserContext;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.client.BookClient;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.client.UserClient;
 
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
 
+@RequiredArgsConstructor
 public class DeleteUserSteps {
-    private Map<String,String> message;
+    private final UserContext userContext;
 
     @When("user tries to delete another user")
     public void userTriesToDeleteAnotherUser() {
-        Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
-                .decoder(new GsonDecoder())
-                .encoder(new GsonEncoder());
-        UserClient userClient = encoder.target(UserClient.class, "http://localhost:8081");
-        message = userClient.deleteUser(1L);
+        userContext.getFeignClient(UserClient.class).deleteUser(1L);
     }
 
     @When("user tries to delete a non-existing user")
     public void userTriesToDeleteANonExistingUser() {
+        assertEquals(userContext.getResponseStatusCode().intValue(), 200);
     }
 
     @Then("the user receives a Not Found Exception")
     public void theUserReceivesANotFoundException() {
-        Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
-                .decoder(new GsonDecoder())
-                .encoder(new GsonEncoder());
-        UserClient userClient = encoder.target(UserClient.class, "http://localhost:8081");
-        assertThatThrownBy(() -> userClient.deleteUser(1L))
-                .isInstanceOf(FeignException.class);
+        assertEquals(userContext.getResponseStatusCode().intValue(), 404);
     }
 }

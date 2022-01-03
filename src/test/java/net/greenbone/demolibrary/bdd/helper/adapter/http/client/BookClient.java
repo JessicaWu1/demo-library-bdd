@@ -19,8 +19,8 @@ public interface BookClient {
     BookResponse getBookById(@Param("id") Long id);
 
     @RequestLine("PUT /book/{id}")
-    Map<String, String> updateBook(@Param("id") Long id, BookRequest bookRequest);
+    void updateBook(@Param("id") Long id, BookRequest bookRequest);
 
     @RequestLine("DELETE /book/{id}")
-    Map<String, String> deleteBook(@Param("id") Long id);
+    void deleteBook(@Param("id") Long id);
 }

@@ -19,6 +19,7 @@ import java.util.NoSuchElementException;
 public class ApplicationUserService {
     private final ApplicationUserRepository applicationUserRepository;
     private final LendBookRepository lendBookRepository;
+
     @Transactional
     public ApplicationUser getUserById(Long id){
         return applicationUserRepository.findById(id)
@@ -44,7 +45,7 @@ public class ApplicationUserService {
 
     @Transactional
     public void updateUser(Long id, ApplicationUser.Update user){
-            //string formatting
+        //string formatting
         ApplicationUser toUpdate = applicationUserRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Could not find Object with ID: " + id.toString()));
         List<LendBook> borrowedBooks = lendBookRepository.findAllById(user.getBorrowedBooks());
@@ -56,4 +57,5 @@ public class ApplicationUserService {
     public void deleteUserWithId(Long id){
         applicationUserRepository.deleteById(id);
     }
+
 }

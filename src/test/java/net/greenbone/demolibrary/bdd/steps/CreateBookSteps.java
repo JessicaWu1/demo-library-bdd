@@ -7,7 +7,9 @@ import feign.gson.GsonEncoder;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.greenbone.demolibrary.bdd.helper.adapter.context.UserContext;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.client.BookClient;
 import net.greenbone.demolibrary.representations.request.BookRequest;
 import net.greenbone.demolibrary.representations.response.BookResponse;
@@ -17,8 +19,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 
 @Slf4j
+@RequiredArgsConstructor
 public class CreateBookSteps {
 
+    private final UserContext userContext;
     private BookResponse bookResponse;
     private BookRequest bookRequest;
 
@@ -35,13 +39,11 @@ public class CreateBookSteps {
         Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
                 .decoder(new GsonDecoder())
                 .encoder(new GsonEncoder());
-        BookClient bookClient = encoder.target(BookClient.class, "http://localhost:8081");
-        bookResponse =  bookClient.createBook(bookRequest);
+        bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest);
     }
 
     @And("the book information is shown")
     public void theCreatedBookInformationIsShown() {
-        assertNotNull(bookResponse);
         assertThat(bookResponse.getAuthor(), Matchers.is(bookRequest.getAuthor()));
         assertThat(bookResponse.getTitle(), Matchers.is(bookRequest.getTitle()));
         assertThat(bookResponse.getDescription(), Matchers.is(bookRequest.getDescription()));
@@ -59,17 +61,15 @@ public class CreateBookSteps {
                 .publishingYear(2015)
                 .quantity(1)
                 .build();
+        try {
+            bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest);
+        }catch(Exception e){
+            userContext.setResponse(e);
+        }
     }
 
-    @Then("the user gets a Bad request Exception")
+    @Then("the user gets a Bad Request Exception")
     public void theUserGetsABadRequestException() {
-        Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
-                .decoder(new GsonDecoder())
-                .encoder(new GsonEncoder());
-        BookClient bookClient = encoder.target(BookClient.class, "http://localhost:8081");
-
-        //is this even right??
-        assertThatThrownBy(() -> bookClient.createBook(bookRequest))
-                .isInstanceOf(FeignException.class);
+        assertEquals(userContext.getResponseStatusCode().intValue(), 400);
     }
 }

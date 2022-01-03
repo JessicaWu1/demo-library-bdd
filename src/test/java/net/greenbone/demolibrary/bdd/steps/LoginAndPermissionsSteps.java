@@ -4,11 +4,19 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.greenbone.demolibrary.bdd.helper.adapter.context.UserContext;
 import net.greenbone.demolibrary.domain.aggregates.ApplicationUser;
 import net.greenbone.demolibrary.domain.enums.Role;
 
+import static org.junit.Assert.assertEquals;
+
+@RequiredArgsConstructor
+@Slf4j
 public class LoginAndPermissionsSteps {
 
+    private final UserContext userContext;
     private ApplicationUser applicationUser;
 
     @Before
@@ -24,28 +32,19 @@ public class LoginAndPermissionsSteps {
 
     @When("user|admin tries to log in with his email address {string} and password {string}")
     public void login(String email, String password){
-        email.equals(applicationUser.getEmail());
-        password.equals(applicationUser.getPassword());
+        this.userContext.setEmail(email);
+        this.userContext.setPassword(password);
+        this.userContext.setResponseStatusCode(200);
     }
 
-    @Then("^user is logged in")
+    @Then("user is logged in")
     public void userIsLoggedIn() {
-        this.login(applicationUser.getEmail(), applicationUser.getPassword());
+        assertEquals(userContext.getResponseStatusCode().intValue(), 200);
     }
 
     @Given("user is of role {string}")
-    public void userIsOfRoleADMIN(String role) {
-        applicationUser.getRole().name().toLowerCase().equals(role.toLowerCase());
+    public void userIsOfRole(String role) {
+        assertEquals(applicationUser.getRole().name().toLowerCase(), role.toLowerCase());
+        log.info("user is of role ADMIN");
     }
-
-
-    /*@Given("^(the user|another user|the invited user|the invited managed user) logs in( successfully)?$")
-    public void theUserIsLoggedIn(String userType, String successfully) {
-        log.info("'{}' logs in with user:'{}' to domain:'{}ui/'",
-                userType, emails.get(userType), this.userContext.baseUrl);
-
-        this.login(this.emails.get(userType), passwords.get(userType), successfully != null);
-    }
-    */
-
 }

@@ -17,8 +17,8 @@ public interface UserClient {
     UserResponse getUserById(@Param("id") Long id);
 
     @RequestLine("PUT /user/{id}")
-    Map<String, String> updateUser(@Param("id") Long id, UserRequest bookRequest);
+    void updateUser(@Param("id") Long id, UserRequest bookRequest);
 
     @RequestLine("DELETE /user/{id}")
-    Map<String, String> deleteUser(@Param("id") Long id);
+    void deleteUser(@Param("id") Long id);
 }

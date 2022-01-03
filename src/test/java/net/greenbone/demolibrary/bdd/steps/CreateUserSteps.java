@@ -61,14 +61,4 @@ public class CreateUserSteps {
         assertEquals(0.0F, userResponse.getLateFees(), 0.3F);
         assertThat(new ArrayList<>(), Matchers.is(userResponse.getBorrowedBooks()));
     }
-
-    @Then("the user gets a Bad Request Status")
-    public void theUserGetsABadRequestException() {
-        Feign.Builder encoder = Feign.builder() //Feign client, http rest client gson json ein und auslesen
-                .decoder(new GsonDecoder())
-                .encoder(new GsonEncoder());
-        UserClient userClient = encoder.target(UserClient.class, "http://localhost:8081");
-        assertThatThrownBy(() -> userClient.createUser(userRequest))
-                .isInstanceOf(FeignException.class);
-    }
 }

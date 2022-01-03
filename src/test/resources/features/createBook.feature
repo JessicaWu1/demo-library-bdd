@@ -11,4 +11,4 @@ Feature: create a new Book
     And user is logged in
     When user tries to create a Book with missing information
     #might not be good to have this -> more on behaviour
-    Then the user gets a Bad request Exception
+    Then the user gets a Bad Request Exception

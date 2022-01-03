@@ -108,4 +108,10 @@ public class ApplicationUser {
 
         String getRole();
     }
+
+    public interface Login {
+        String getEmail();
+
+        String getPassword();
+    }
 }

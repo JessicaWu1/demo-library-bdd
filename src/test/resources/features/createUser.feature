@@ -10,4 +10,4 @@ Feature: creating a new user
     Given user is of role 'ADMIN'
     And user is logged in
     When trying to create a user without an initial password
-    Then the user gets a Bad Request Status
+    Then the user gets a Bad Request Exception
