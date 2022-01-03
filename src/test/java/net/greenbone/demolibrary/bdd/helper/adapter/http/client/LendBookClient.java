@@ -14,12 +14,6 @@ public interface LendBookClient {
     @RequestLine("POST /lendBook")
     LendBookResponse lendBook(LendBookRequest bookRequest);
 
-    @RequestLine("GET /lendBook/{id}")
-    LendBookResponse getLendBookById(@Param("id") Long id);
-
     @RequestLine("PUT /lendBook/{id}")
     Response updateLendBook(@Param("id") Long id, LendBookRequest bookRequest);
-
-    @RequestLine("DELETE /lendBook/{id}")
-    Response deleteLendBook(@Param("id") Long id);
 }

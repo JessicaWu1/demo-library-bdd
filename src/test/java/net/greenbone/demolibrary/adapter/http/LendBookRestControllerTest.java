@@ -94,18 +94,6 @@ public class LendBookRestControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = "ADMIN")
-    public void expect_getLendBookById_toReturn() throws Exception {
-        when(lendBookService.getLendBookById(1L))
-                .thenReturn(lendBook);
-
-        this.mockMvc.perform(
-                        get("/lendBook/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("1"));
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = "ADMIN")
     public void expect_lendBook_toReturn() throws Exception {
         when(lendBookService.lendingABook(any(LendBook.Create.class)))
                 .thenReturn(lendBook);
@@ -128,14 +116,6 @@ public class LendBookRestControllerTest {
                         put("/lendBook/1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .content(lendBookJson))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = "ADMIN")
-    public void expect_deleteLendBook_toReturn() throws Exception {
-        this.mockMvc.perform(
-                        delete("/lendBook/1"))
                 .andExpect(status().isOk());
     }
 }

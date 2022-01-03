@@ -23,13 +23,6 @@ public class LendBookRestController {
 
     private final LendBookService lendBookService;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public LendBookResponse getLendBookById(@PathVariable Long id){
-        LendBook lendBook = lendBookService.getLendBookById(id);
-        LendBookResponse lendBookResponse = LendBookResponse.lendBookToLendBookResponse(lendBook);
-        return lendBookResponse;
-    }
-
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public LendBookResponse lendBook(@Valid @RequestBody LendBookRequest lendBookRequest){
@@ -43,12 +36,6 @@ public class LendBookRestController {
     @ResponseStatus(HttpStatus.OK)
     public void updateLendBook(@PathVariable Long id, @RequestBody LendBookRequest lendBook){
         lendBookService.updateLendBookById(id, lendBook);
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteLendBook(@PathVariable Long id){
-        lendBookService.deleteLendBook(id);
     }
 
     @ExceptionHandler({NoSuchElementException.class, NullPointerException.class, Exception.class})
