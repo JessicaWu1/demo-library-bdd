@@ -2,7 +2,7 @@ package net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler;
 
 import feign.FeignException;
 
-public class ExceptionExtraction {
+public class ExceptionExtractor {
     public static RequestException extractRequestException(Throwable e) {
         if (e instanceof FeignException) {
             FeignException exception = (FeignException) e;

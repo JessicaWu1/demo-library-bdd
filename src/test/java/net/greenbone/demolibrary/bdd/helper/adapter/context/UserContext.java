@@ -6,8 +6,7 @@ import feign.gson.GsonEncoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler.ExceptionExtraction;
-import net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler.RequestErrorDecoder;
+import net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler.ExceptionExtractor;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler.RequestException;
 
 @Slf4j
@@ -30,7 +29,6 @@ public class UserContext {
     public <T> T getFeignClient(Class<T> clazz) {
 
         Feign.Builder encoder = Feign.builder()
-                .errorDecoder(new RequestErrorDecoder())
                 .decoder(new GsonDecoder())
                 .encoder(new GsonEncoder());
         return encoder.target(clazz, baseUrl);
@@ -43,10 +41,7 @@ public class UserContext {
     }
 
     public void setResponse(Throwable e){
-        RequestException requestException = ExceptionExtraction.extractRequestException(e);
-        if (requestException.getStatus() == 400) {
-            log.info(requestException.getMessage());
-        }
+        RequestException requestException = ExceptionExtractor.extractRequestException(e);
         this.responseStatusCode = requestException.getStatus();
         this.responseMessage = requestException.getMessage();
     }
