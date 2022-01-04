@@ -20,14 +20,8 @@ public class BookService {
     }
 
     public Book createNewBook(Book.Create book){
-        try{
-            Book newBook = Book.fromCreate(book);
-            Book createdNewBook = bookRepository.save(newBook);
-            return createdNewBook;
-        }catch(Exception e){
-            log.error(e.getMessage(), e.getStackTrace());
-            return null;
-        }
+        Book newBook = Book.fromCreate(book);
+        return bookRepository.save(newBook);
     }
 
     public void updateBook(Long id, Book.Update book){

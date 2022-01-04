@@ -37,20 +37,4 @@ public class LendBookRestController {
     public void updateLendBook(@PathVariable Long id, @RequestBody LendBookRequest lendBook){
         lendBookService.updateLendBookById(id, lendBook);
     }
-
-    @ExceptionHandler({NoSuchElementException.class, NullPointerException.class, Exception.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Map<String,String>> handle(Exception exception){
-        Map<String, String> message = Collections.singletonMap("response", exception.getMessage());
-
-        if(exception instanceof NoSuchElementException || exception instanceof NullPointerException){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(message);
-        }
-
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(message);
-    }
 }

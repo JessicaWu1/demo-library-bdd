@@ -63,16 +63,6 @@ public class ApplicationUser {
                 .build();
     }
 
-    public static ApplicationUser fromCreateWithoutBorrowedBooks(ApplicationUser.Create user) {
-        return ApplicationUser.builder()
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .role(Role.valueOf(user.getRole()))
-                .lateFees(user.getLateFees())
-                .name(user.getName())
-                .build();
-    }
-
     public void fromUpdate(ApplicationUser.Update user, List<LendBook> borrowedBooks){
         this.name = user.getName();
         this.email = user.getEmail();

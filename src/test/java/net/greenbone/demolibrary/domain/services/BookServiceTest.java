@@ -19,7 +19,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -64,18 +64,20 @@ public class BookServiceTest {
 
     @Test
     public void expect_updateBook_toReturn() {
-        /*when(bookRepository.findById(anyLong()))
+        when(bookRepository.findById(anyLong()))
                 .thenReturn(Optional.of(book));
-        boolean result = bookService.updateBook(1L, bookRequest);
-        assertThat(true, Matchers.is(result));*/
+
+        bookService.updateBook(1L, bookRequest);
+
+        verify(bookRepository, times(1)).findById(anyLong());
+        verify(bookRepository,times(1)).save(any(Book.class));
     }
 
     @Test
     public void expect_deleteBookWithId_toReturn() {
-        /*when(bookRepository.findById(anyLong()))
-                .thenReturn(Optional.of(book));
-        Book result = bookService.deleteBookWithId(1L);
-        assertNotNull(result);
-        assertThat(book, Matchers.is(result));*/
+
+        bookService.deleteBookWithId(1L);
+
+        verify(bookRepository, times(1)).deleteById(1L);
     }
 }

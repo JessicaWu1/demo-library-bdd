@@ -29,8 +29,7 @@ public class ApplicationUserRestController {
     public UserResponse getUserById(@PathVariable Long id){
         ApplicationUser applicationUser = applicationUserService.getUserById(id);
 
-        UserResponse userResponse = UserResponse.applicationUserToUserResponse(applicationUser);
-        return userResponse;
+        return UserResponse.applicationUserToUserResponse(applicationUser);
     }
 
     @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
@@ -54,22 +53,5 @@ public class ApplicationUserRestController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteUserWithID(@PathVariable Long id){
         applicationUserService.deleteUserWithId(id);
-    }
-
-    //exceptions, die bis zum controller gereicht werden, werden hier behandelt -> try catch aus den services raus und hier die überprüfungen auch
-    @ExceptionHandler({NoSuchElementException.class, NullPointerException.class, Exception.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Map<String,String>> handle(Exception exception){
-        Map<String, String> message = Collections.singletonMap("response", exception.getMessage());
-
-        if(exception instanceof NoSuchElementException || exception instanceof NullPointerException){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(message);
-        }
-
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(message);
     }
 }

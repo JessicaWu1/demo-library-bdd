@@ -20,7 +20,7 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ApplicationUserServiceTest {
@@ -45,7 +45,7 @@ public class ApplicationUserServiceTest {
                 .email("maxmustermann@example.com")
                 .password("password")
                 .role("ADMIN")
-                //.borrowedBooks(borrowedBooks)
+                .borrowedBooks(borrowedBooks)
                 .build();
     }
 
@@ -72,18 +72,20 @@ public class ApplicationUserServiceTest {
 
     @Test
     public void expect_updateUser_toReturn() {
-        /*when(applicationUserRepository.findById(anyLong()))
+        when(applicationUserRepository.findById(anyLong()))
                 .thenReturn(Optional.of(applicationUser));
-        applicationUserService.updateUser(1L,userRequest);*/
-        //assertThat(true, Matchers.is(result));
+
+        applicationUserService.updateUser(1L,userRequest);
+
+        verify(applicationUserRepository,times(1)).findById(anyLong());
+        verify(applicationUserRepository, times(1)).save(any(ApplicationUser.class));
     }
 
     @Test
     public void expect_deleteUserWithId_toReturn() {
-        /*when(applicationUserRepository.findById(anyLong()))
-                .thenReturn(Optional.of(applicationUser));
-        ApplicationUser result = applicationUserService.deleteUserWithId(1L);
-        assertNotNull(result);
-        assertThat(applicationUser, Matchers.is(result));*/
+
+        applicationUserService.deleteUserWithId(1L);
+
+        verify(applicationUserService, times(1)).deleteUserWithId(1L);
     }
 }
