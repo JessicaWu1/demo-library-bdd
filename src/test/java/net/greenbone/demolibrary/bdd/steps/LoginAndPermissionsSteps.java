@@ -32,9 +32,7 @@ public class LoginAndPermissionsSteps {
 
     @When("user|admin tries to log in with his email address {string} and password {string}")
     public void login(String email, String password){
-        this.userContext.setEmail(email);
-        this.userContext.setPassword(password);
-        this.userContext.setResponseStatusCode(200);
+        //ToDo
     }
 
     @Then("user is logged in")
