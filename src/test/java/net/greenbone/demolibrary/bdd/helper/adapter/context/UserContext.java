@@ -1,11 +1,14 @@
 package net.greenbone.demolibrary.bdd.helper.adapter.context;
 
 import feign.Feign;
+import feign.form.FormEncoder;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
+import feign.jackson.JacksonDecoder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.greenbone.demolibrary.bdd.helper.adapter.http.client.KeycloakClient;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler.ExceptionExtractor;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler.RequestException;
 
@@ -23,11 +26,18 @@ public class UserContext {
 
     private String baseUrl = "http://localhost:8081";
 
+    private KeycloakClient keycloakClient;
+
     public UserContext(){
+        keycloakClient = Feign.builder()
+                .decoder(new JacksonDecoder())
+                .encoder(new FormEncoder())
+                .target(KeycloakClient.class, baseUrl);
     }
 
-    public <T> T getFeignClient(Class<T> clazz) {
 
+
+    public <T> T getFeignClient(Class<T> clazz) {
         Feign.Builder encoder = Feign.builder()
                 .decoder(new GsonDecoder())
                 .encoder(new GsonEncoder());

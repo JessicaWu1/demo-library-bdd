@@ -97,8 +97,4 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .and()
                 .withUser("admin@example.com").password("password").roles("ADMIN");
     }*/
-
-
-
-
 }
