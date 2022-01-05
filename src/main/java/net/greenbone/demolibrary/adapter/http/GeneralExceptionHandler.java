@@ -43,13 +43,6 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return (ResponseEntity<Map<String, String>>) message;
     }
 
- /*   @ExceptionHandler({MethodArgumentNotValidException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map<String,String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException methodArgumentNotValidException){
-        Map<String, String> message = Collections.singletonMap("response", methodArgumentNotValidException.getMessage());
-        return (ResponseEntity<Map<String, String>>) message;
-    }*/
-
     @ExceptionHandler({AuthenticationException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<Map<String,String>> handleAuthenticationException(AuthenticationException authenticationException){
