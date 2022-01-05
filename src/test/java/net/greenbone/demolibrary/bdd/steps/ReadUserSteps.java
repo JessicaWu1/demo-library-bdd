@@ -39,9 +39,4 @@ public class ReadUserSteps {
             userContext.setResponse(e);
         }
     }
-
-    @Then("a Null Pointer Exception is thrown")
-    public void aNotFoundExceptionIsThrown() {
-        assertEquals(userContext.getResponseStatusCode().intValue(), 404);
-    }
 }

@@ -39,14 +39,4 @@ public class DeleteBookSteps {
             userContext.setResponse(e);
         }
     }
-
-    @Then("a success message is shown")
-    public void aSuccessMessageIsShown() {
-        assertEquals(userContext.getResponseStatusCode().intValue(), 200);
-    }
-
-    @Then("the user gets a Not Found Exception")
-    public void theUserGetsANotFoundException() {
-        assertEquals(userContext.getResponseStatusCode().intValue(), 404);
-    }
 }

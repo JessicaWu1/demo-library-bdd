@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.client.KeycloakClient;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler.ExceptionExtractor;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler.RequestException;
+import net.greenbone.demolibrary.bdd.helper.representations.TokenResponse;
 
 @Slf4j
 public class UserContext {
@@ -19,20 +20,24 @@ public class UserContext {
 
     private String responseMessage;
 
-    @Setter
-    private String email;
-    @Setter
-    private String password;
-
     private String baseUrl = "http://localhost:8081";
+    @Getter
+    private String client_id = "demo-library";
+    @Getter
+    private String client_secret = "";
 
+    @Getter
     private KeycloakClient keycloakClient;
+    @Getter
+    @Setter
+    private TokenResponse tokenResponse;
 
     public UserContext(){
         keycloakClient = Feign.builder()
                 .decoder(new JacksonDecoder())
                 .encoder(new FormEncoder())
-                .target(KeycloakClient.class, baseUrl);
+                .target(KeycloakClient.class, "http://localhost:8080");
+        tokenResponse = new TokenResponse();
     }
 
 

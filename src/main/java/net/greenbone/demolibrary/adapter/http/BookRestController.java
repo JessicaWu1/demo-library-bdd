@@ -39,7 +39,7 @@ public class BookRestController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<BookResponse> getBooks(){
         List<Book> books = bookService.getBooks();
@@ -52,6 +52,7 @@ public class BookRestController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public BookResponse createNewBook(@Valid @RequestBody BookRequest book){
         Book createdBook = bookService.createNewBook(book);
 

@@ -1,6 +1,5 @@
 Feature: Logging in and getting a role
 
   Scenario: User tries to Log in
-    Given user|admin is created
-    When user|admin tries to log in with his email address "maxmustermann@gmail.com" and password "password"
+    When user tries to log in with his email address and password
     Then user is logged in

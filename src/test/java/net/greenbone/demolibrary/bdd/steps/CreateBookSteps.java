@@ -64,9 +64,4 @@ public class CreateBookSteps {
             userContext.setResponse(e);
         }
     }
-
-    @Then("the user gets a Bad Request Exception")
-    public void theUserGetsABadRequestException() {
-        assertEquals(userContext.getResponseStatusCode().intValue(), 400);
-    }
 }

@@ -43,16 +43,6 @@ public class LendBookServiceTest {
     private Book book;
 
     @Test
-    public void expect_getLendBookById_toReturn() {
-        when(lendBookRepository.findById(anyLong()))
-                .thenReturn(Optional.of(lendBook));
-
-        LendBook result = lendBookService.getLendBookById(1L);
-
-        assertThat(lendBook, Matchers.is(result));
-    }
-
-    @Test
     public void expect_lendingABook_toReturn() {
         when(bookRepository.findById(anyLong()))
                 .thenReturn(Optional.of(book));

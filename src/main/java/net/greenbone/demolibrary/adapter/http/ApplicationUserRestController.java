@@ -26,6 +26,7 @@ public class ApplicationUserRestController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public UserResponse getUserById(@PathVariable Long id){
         ApplicationUser applicationUser = applicationUserService.getUserById(id);
 
@@ -34,6 +35,7 @@ public class ApplicationUserRestController {
 
     @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createNewUser(@Valid @RequestBody UserRequest user){
         ApplicationUser createdUser = applicationUserService.createNewUser(user);
 
