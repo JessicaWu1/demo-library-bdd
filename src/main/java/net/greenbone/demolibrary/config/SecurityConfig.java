@@ -36,7 +36,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(
-                        "/**"
+
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and().cors()

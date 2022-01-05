@@ -21,10 +21,11 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
+@PreAuthorize("isAuthenticated()")
 public class ApplicationUserRestController {
     private final ApplicationUserService applicationUserService;
 
-    @PreAuthorize("isAuthenticated()")
+
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public UserResponse getUserById(@PathVariable Long id){
@@ -33,7 +34,7 @@ public class ApplicationUserRestController {
         return UserResponse.applicationUserToUserResponse(applicationUser);
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createNewUser(@Valid @RequestBody UserRequest user){
@@ -43,14 +44,14 @@ public class ApplicationUserRestController {
         return createdUserResponse;
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest user){
         applicationUserService.updateUser(id, user);
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteUserWithID(@PathVariable Long id){

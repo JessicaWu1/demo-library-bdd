@@ -24,11 +24,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/book")
+@PreAuthorize("isAuthenticated()")
 public class BookRestController {
 
     private final BookService bookService;
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public BookResponse getBookById(@PathVariable Long id){
@@ -38,7 +38,6 @@ public class BookRestController {
         return bookResponse;
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<BookResponse> getBooks(){
@@ -50,7 +49,7 @@ public class BookRestController {
         return booksResponse;
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public BookResponse createNewBook(@Valid @RequestBody BookRequest book){
@@ -60,14 +59,14 @@ public class BookRestController {
         return createdBookResponse;
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void updateBook(@PathVariable Long id, @RequestBody @Valid BookRequest book){
         bookService.updateBook(id, book);
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteBookWithID(@PathVariable Long id){

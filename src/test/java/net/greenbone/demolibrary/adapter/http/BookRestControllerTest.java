@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -75,8 +76,27 @@ public class BookRestControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user")
-    public void expect_getBookById_toReturn() throws Exception {
+    public void expect_getBookById_toReturn_withNoUser() throws Exception {
+        when(this.bookService.getBookById(anyLong()))
+                .thenReturn(book); //any(), any(klasse) 1x in der methode für den aufruf, dann müssen alle any sein oder eq
+        this.mockMvc.perform(
+                        get("/book/1"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void expect_getBookById_toReturn_withAnonymousUser() throws Exception {
+        when(this.bookService.getBookById(anyLong()))
+                .thenReturn(book); //any(), any(klasse) 1x in der methode für den aufruf, dann müssen alle any sein oder eq
+        this.mockMvc.perform(
+                        get("/book/1"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    public void expect_getBookById_toReturn_withUser() throws Exception {
         when(this.bookService.getBookById(anyLong()))
                 .thenReturn(book); //any(), any(klasse) 1x in der methode für den aufruf, dann müssen alle any sein oder eq
         this.mockMvc.perform(
@@ -87,7 +107,56 @@ public class BookRestControllerTest {
 
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    public void expect_createNewBook_toReturn() throws Exception {
+    public void expect_getBookById_toReturn_withAdmin() throws Exception {
+        when(this.bookService.getBookById(anyLong()))
+                .thenReturn(book); //any(), any(klasse) 1x in der methode für den aufruf, dann müssen alle any sein oder eq
+        this.mockMvc.perform(
+                        get("/book/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("1")); //$[0].id
+    }
+
+    @Test
+    public void expect_createNewBook_toReturn_withNoUser() throws Exception {
+        when(this.bookService.createNewBook(any(Book.Create.class)))
+                .thenReturn(book); //any(), any(klasse) 1x in der methode für den aufruf, dann müssen alle any sein oder eq
+        this.mockMvc.perform(
+                        post("/book")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(bookRequestJson))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void expect_createNewBook_toReturn_withAnonymousUser() throws Exception {
+        when(this.bookService.createNewBook(any(Book.Create.class)))
+                .thenReturn(book); //any(), any(klasse) 1x in der methode für den aufruf, dann müssen alle any sein oder eq
+        this.mockMvc.perform(
+                        post("/book")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(bookRequestJson))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"User"})
+    public void expect_createNewBook_toReturn_withUser() throws Exception {
+        when(this.bookService.createNewBook(any(Book.Create.class)))
+                .thenReturn(book); //any(), any(klasse) 1x in der methode für den aufruf, dann müssen alle any sein oder eq
+        this.mockMvc.perform(
+                        post("/book")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(bookRequestJson))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    public void expect_createNewBook_toReturn_withAdmin() throws Exception {
         when(this.bookService.createNewBook(any(Book.Create.class)))
                 .thenReturn(book); //any(), any(klasse) 1x in der methode für den aufruf, dann müssen alle any sein oder eq
         this.mockMvc.perform(
@@ -100,7 +169,40 @@ public class BookRestControllerTest {
     }
 
     @Test
-    public void expect_updateBook_toReturn() throws Exception {
+    public void expect_updateBook_toReturn_withNoUser() throws Exception {
+        this.mockMvc.perform(
+                        put("/book/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(bookRequestJson))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void expect_updateBook_toReturn_withAnonymousUser() throws Exception {
+        this.mockMvc.perform(
+                        put("/book/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(bookRequestJson))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    public void expect_updateBook_toReturn_withUser() throws Exception {
+        this.mockMvc.perform(
+                        put("/book/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(bookRequestJson))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    public void expect_updateBook_toReturn_withAdmin() throws Exception {
         this.mockMvc.perform(
                         put("/book/1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -110,7 +212,34 @@ public class BookRestControllerTest {
     }
 
     @Test
-    public void expect_deleteBokWithID_toReturn() throws Exception {
+    public void expect_deleteBokWithID_toReturn_withNoUser() throws Exception {
+        this.mockMvc.perform(
+                        delete("/book/1")
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void expect_deleteBokWithID_toReturn_withAnonymousUser() throws Exception {
+        this.mockMvc.perform(
+                        delete("/book/1")
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    public void expect_deleteBokWithID_toReturn_withUser() throws Exception {
+        this.mockMvc.perform(
+                        delete("/book/1")
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    public void expect_deleteBokWithID_toReturn_withAdmin() throws Exception {
         this.mockMvc.perform(
                         delete("/book/1")
                                 .accept(MediaType.APPLICATION_JSON_VALUE))

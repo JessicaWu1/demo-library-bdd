@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -71,8 +72,29 @@ public class ApplicationUserRestControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user")
-    public void expect_getUserById_toReturn() throws Exception {
+    public void expect_getUserById_toReturn_withNoUser() throws Exception {
+        when(applicationUserService.getUserById(anyLong()))
+                .thenReturn(applicationUser);
+        this.mockMvc.perform(
+                        get("/user/1")
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void expect_getUserById_toReturn_withAnonymousUser() throws Exception {
+        when(applicationUserService.getUserById(anyLong()))
+                .thenReturn(applicationUser);
+        this.mockMvc.perform(
+                        get("/user/1")
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    public void expect_getUserById_toReturn_withUser() throws Exception {
         when(applicationUserService.getUserById(anyLong()))
                 .thenReturn(applicationUser);
         this.mockMvc.perform(
@@ -87,8 +109,62 @@ public class ApplicationUserRestControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = {"Admin"})
+    public void expect_getUserById_toReturn_withAdmin() throws Exception {
+        when(applicationUserService.getUserById(anyLong()))
+                .thenReturn(applicationUser);
+        this.mockMvc.perform(
+                        get("/user/1")
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value("Toller Name"))
+                .andExpect(jsonPath("$.email").value("maxmustermann@gmail.com"))
+                .andExpect(jsonPath("$.password").value("password"))
+                .andExpect(jsonPath("$.role").value("ADMIN"));
+    }
+
+    @Test
+    public void expect_createNewUser_toReturn_withNoUser() throws Exception {
+        when(applicationUserService.createNewUser(any(ApplicationUser.Create.class)))
+                .thenReturn(applicationUser);
+        this.mockMvc.perform(
+                        post("/user")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(userRequestJson))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void expect_createNewUser_toReturn_withAnonymousUser() throws Exception {
+        when(applicationUserService.createNewUser(any(ApplicationUser.Create.class)))
+                .thenReturn(applicationUser);
+        this.mockMvc.perform(
+                        post("/user")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(userRequestJson))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    public void expect_createNewUser_toReturn_withUser() throws Exception {
+        when(applicationUserService.createNewUser(any(ApplicationUser.Create.class)))
+                .thenReturn(applicationUser);
+        this.mockMvc.perform(
+                        post("/user")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(userRequestJson))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    public void expect_createNewUser_toReturn() throws Exception {
+    public void expect_createNewUser_toReturn_withAdmin() throws Exception {
         when(applicationUserService.createNewUser(any(ApplicationUser.Create.class)))
                 .thenReturn(applicationUser);
         this.mockMvc.perform(
@@ -105,26 +181,88 @@ public class ApplicationUserRestControllerTest {
     }
 
     @Test
+    public void expect_updateUser_toReturn_withNoUser() throws Exception {
+        this.mockMvc.perform(
+                        put("/user/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(userRequestJson)
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void expect_updateUser_toReturn_withAnonymousUser() throws Exception {
+        this.mockMvc.perform(
+                        put("/user/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(userRequestJson)
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    public void expect_updateUser_toReturn_withUser() throws Exception {
+        this.mockMvc.perform(
+                        put("/user/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(userRequestJson)
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    public void expect_updateUser_toReturn() throws Exception {
+    public void expect_updateUser_toReturn_withAdmin() throws Exception {
         this.mockMvc.perform(
                         put("/user/1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .content(userRequestJson)
                                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
-                //.andExpect(jsonPath("$.response").value("Successfully updated User with ID: 1"));
+    }
+
+    @Test
+    public void expect_deleteUserWithID_toReturn_withNoUser() throws Exception {
+        this.mockMvc.perform(
+                        delete("/user/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(userRequestJson)
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void expect_deleteUserWithID_toReturn_withAnonymousUser() throws Exception {
+        this.mockMvc.perform(
+                        delete("/user/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(userRequestJson)
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    public void expect_deleteUserWithID_toReturn_withUser() throws Exception {
+        this.mockMvc.perform(
+                        delete("/user/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(userRequestJson)
+                                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isForbidden());
     }
 
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    public void expect_deleteUserWithID_toReturn() throws Exception {
+    public void expect_deleteUserWithID_toReturn_withAdmin() throws Exception {
         this.mockMvc.perform(
                         delete("/user/1")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .content(userRequestJson)
                                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
-                //.andExpect(jsonPath("$.response").value("Successfully removed User with ID: 1"));
     }
 }

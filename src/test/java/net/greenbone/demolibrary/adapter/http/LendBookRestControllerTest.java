@@ -93,7 +93,37 @@ public class LendBookRestControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user", roles = "ADMIN")
+    public void expect_lendBook_toReturn_withNoUser() throws Exception {
+        when(lendBookService.lendingABook(any(LendBook.Create.class)))
+                .thenReturn(lendBook);
+        String lendBookJson = objectMapper.writeValueAsString(lendBookRequest);
+
+        this.mockMvc.perform(
+                        post("/lendBook")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(lendBookJson))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = "USER")
+    public void expect_lendBook_toReturn_withUser() throws Exception {
+        when(lendBookService.lendingABook(any(LendBook.Create.class)))
+                .thenReturn(lendBook);
+        String lendBookJson = objectMapper.writeValueAsString(lendBookRequest);
+
+        this.mockMvc.perform(
+                        post("/lendBook")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .accept(MediaType.APPLICATION_JSON_VALUE)
+                                .content(lendBookJson))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value("1"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     public void expect_lendBook_toReturn() throws Exception {
         when(lendBookService.lendingABook(any(LendBook.Create.class)))
                 .thenReturn(lendBook);
@@ -109,8 +139,29 @@ public class LendBookRestControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "user", roles = "ADMIN")
-    public void expect_updateLendBook_toReturn() throws Exception {
+    public void expect_updateLendBook_toReturn_withNoUser() throws Exception {
+        String lendBookJson = objectMapper.writeValueAsString(lendBookRequest);
+        this.mockMvc.perform(
+                        put("/lendBook/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(lendBookJson))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = "USER")
+    public void expect_updateLendBook_toReturn_withUser() throws Exception {
+        String lendBookJson = objectMapper.writeValueAsString(lendBookRequest);
+        this.mockMvc.perform(
+                        put("/lendBook/1")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(lendBookJson))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    public void expect_updateLendBook_toReturn_withAdmin() throws Exception {
         String lendBookJson = objectMapper.writeValueAsString(lendBookRequest);
         this.mockMvc.perform(
                         put("/lendBook/1")

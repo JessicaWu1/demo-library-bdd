@@ -15,8 +15,7 @@ import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.AccessTokenResponse;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.contains;
 
 @Slf4j
@@ -59,16 +58,17 @@ public class LoginAndPermissionsSteps {
         this.login();
     }
 
-    @Given("user is of role {string}")
+    @Given("user is of role {string}") //better
     public void userIsOfRole(String role) {
         DecodedJWT jwt = JWT.decode(userContext.getTokenResponse().getAccessToken());
         log.info("JWT " + jwt.getClaims().get("realm_access").asMap().get("roles").toString().contains(role));
         //ist das überhaupt richtig??
-        assertThat(jwt.getClaims()
+        assertTrue(
+                jwt.getClaims()
                 .get("realm_access")
                 .asMap()
                 .get("roles")
-                .toString().contains(role), is(true));
+                .toString().contains(role));
         log.info("user is of role" + role);
     }
 
