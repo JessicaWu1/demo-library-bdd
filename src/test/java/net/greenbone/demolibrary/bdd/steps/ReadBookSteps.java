@@ -29,13 +29,13 @@ public class ReadBookSteps {
 
     @When("user tries to read book information")
     public void userTriesToReadBookInformation() {
-        bookResponse =  userContext.getFeignClient(BookClient.class).getBookById(7L,this.userContext.getHeaderMap());
+        bookResponse =  userContext.getFeignClient(BookClient.class).getBookById(8L,this.userContext.getHeaderMap());
     }
 
     @Then("the information is shown")
     public void theInformationIsShown() {
         assertNotNull(bookResponse);
-        assertThat(1L, Matchers.is(bookResponse.getId()));
+        assertThat(8L, Matchers.is(bookResponse.getId()));
     }
 
     @When("user tries to read non-existing book information")

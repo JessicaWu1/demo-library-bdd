@@ -26,8 +26,6 @@ public class ResultVerification {
 
     @Then("the user gets a Not Found Exception")
     public void theUserGetsANotFoundException() {
-        log.info("UserContext: ", userContext);
-        log.info("ResponseStatusCode: ", userContext.getResponseStatusCode());
         assertEquals(404, userContext.getResponseStatusCode().intValue());
     }
 }

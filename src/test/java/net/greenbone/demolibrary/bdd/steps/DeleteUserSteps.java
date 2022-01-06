@@ -24,7 +24,10 @@ public class DeleteUserSteps {
     @When("admin tries to delete a non-existing user")
     public void adminTriesToDeleteANonExistingUser() {
         try{
-            userContext.getFeignClient(UserClient.class).deleteUser(3L,this.userContext.getHeaderMap());
+            this.userContext.setResponseStatusCode(
+                    userContext.getFeignClient(UserClient.class)
+                            .deleteUser(3L,this.userContext.getHeaderMap())
+                            .status());
         }catch(Exception e){
             userContext.setResponse(e);
         }

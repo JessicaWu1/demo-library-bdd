@@ -2,6 +2,7 @@ package net.greenbone.demolibrary.adapter.http;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -34,6 +35,13 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException noSuchElementException){
         Map<String, String> message = Collections.singletonMap("response", noSuchElementException.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({EmptyResultDataAccessException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException emptyResultDataAccessException){
+        Map<String, String> message = Collections.singletonMap("response", emptyResultDataAccessException.getMessage());
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 

@@ -24,6 +24,6 @@ public class ReadBookAsList {
 
     @Then("a List of those books is returned")
     public void aListOfThoseBooksIsReturned() {
-        assertEquals(books.size(), 2);
+        assertEquals(books.size(), 1);
     }
 }

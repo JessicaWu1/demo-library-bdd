@@ -36,7 +36,10 @@ public class DeleteBookSteps {
     @When("user tries to delete a non-existing book")
     public void userTriesToDeleteANonExistingBook() {
         try{
-            userContext.getFeignClient(BookClient.class).deleteBook(3L,this.userContext.getHeaderMap());
+            userContext.setResponseStatusCode(
+                    userContext.getFeignClient(BookClient.class)
+                            .deleteBook(3L,this.userContext.getHeaderMap())
+                            .status());
         }catch(Exception e){
             userContext.setResponse(e);
         }
