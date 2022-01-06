@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 public class ApplicationUserRestController {
     private final ApplicationUserService applicationUserService;
 
-
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public UserResponse getUserById(@PathVariable Long id){
@@ -41,10 +41,11 @@ public class ApplicationUserRestController {
         ApplicationUser createdUser = applicationUserService.createNewUser(user);
 
         UserResponse createdUserResponse = UserResponse.applicationUserToUserResponse(createdUser);
+        log.info("CreatedUserResponse in Request: "+createdUserResponse);
         return createdUserResponse;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest user){

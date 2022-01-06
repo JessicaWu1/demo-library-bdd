@@ -29,7 +29,7 @@ public class BookRestController {
 
     private final BookService bookService;
 
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public BookResponse getBookById(@PathVariable Long id){
@@ -39,7 +39,6 @@ public class BookRestController {
         return bookResponse;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<BookResponse> getBooks(){
