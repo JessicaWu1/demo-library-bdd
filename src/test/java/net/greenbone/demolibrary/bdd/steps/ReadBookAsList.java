@@ -19,7 +19,7 @@ public class ReadBookAsList {
 
     @When("user searches for all books from a specific author")
     public void userSearchesForAllBooksFromASpecificAuthor() {
-        books = userContext.getFeignClient(BookClient.class).getBooks();
+        books = userContext.getFeignClient(BookClient.class).getBooks(this.userContext.getHeaderMap());
     }
 
     @Then("a List of those books is returned")

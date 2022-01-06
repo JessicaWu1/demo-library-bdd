@@ -40,7 +40,7 @@ public class CreateUserSteps {
                 .role("ADMIN")
                 .build();
 
-        userResponse =  userContext.getFeignClient(UserClient.class).createUser(userRequest);
+        userResponse =  userContext.getFeignClient(UserClient.class).createUser(userRequest,this.userContext.getHeaderMap());
     }
 
     @When("trying to create a user without an initial password")
@@ -51,7 +51,7 @@ public class CreateUserSteps {
                 .role("ADMIN")
                 .build();
         try{
-            userResponse =  userContext.getFeignClient(UserClient.class).createUser(userRequest);
+            userResponse =  userContext.getFeignClient(UserClient.class).createUser(userRequest,this.userContext.getHeaderMap());
         }catch(Exception e){
             userContext.setResponse(e);
         }

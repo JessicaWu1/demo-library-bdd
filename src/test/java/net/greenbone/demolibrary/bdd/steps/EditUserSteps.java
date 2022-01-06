@@ -25,7 +25,7 @@ public class EditUserSteps {
                 .email("maxmustermann@example.com")
                 .build();
         try{
-            userContext.getFeignClient(UserClient.class).updateUser(3L, userRequest);
+            userContext.getFeignClient(UserClient.class).updateUser(3L, userRequest,this.userContext.getHeaderMap());
         }catch(Exception e){
             userContext.setResponse(e);
         }
@@ -41,6 +41,8 @@ public class EditUserSteps {
                 .role("ADMIN")
                 .email("maxmustermann@example.com")
                 .build();
-        userContext.setResponseStatusCode(userContext.getFeignClient(UserClient.class).updateUser(1L, userRequest).status());
+        userContext.setResponseStatusCode(userContext.getFeignClient(UserClient.class)
+                .updateUser(1L, userRequest,this.userContext.getHeaderMap())
+                .status());
     }
 }

@@ -28,15 +28,20 @@ public class CreateBookSteps {
 
     @When("user creates a new book with the needed information")
     public void userCreatesANewBookWithTheNeededInformation() {
-        bookRequest = BookRequest.builder()
-                .title("Greatest Book you'll ever read")
-                .author("Newcomer Author")
-                .description("Really worth your time.")
-                .publisher("New Publisher")
-                .publishingYear(2015)
-                .quantity(1)
-                .build();
-        bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest);
+        try{
+            bookRequest = BookRequest.builder()
+                    .title("Greatest Book you'll ever read")
+                    .author("Newcomer Author")
+                    .description("Really worth your time.")
+                    .publisher("New Publisher")
+                    .publishingYear(2015)
+                    .quantity(1)
+                    .build();
+            bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest,this.userContext.getHeaderMap());
+        }catch(Exception e){
+            log.info("Exception e", e);
+        }
+
     }
 
     @And("the book information is shown")
@@ -59,7 +64,7 @@ public class CreateBookSteps {
                 .quantity(1)
                 .build();
         try {
-            bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest);
+            bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest,this.userContext.getHeaderMap());
         }catch(Exception e){
             userContext.setResponse(e);
         }

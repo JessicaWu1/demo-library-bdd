@@ -10,8 +10,12 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.client.KeycloakClient;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler.ExceptionExtractor;
+import net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler.RequestErrorDecoder;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.exceptionHandler.RequestException;
 import net.greenbone.demolibrary.bdd.helper.representations.TokenResponse;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public class UserContext {
@@ -32,18 +36,24 @@ public class UserContext {
     @Setter
     private TokenResponse tokenResponse;
 
+    @Getter
+    Map<String, Object> headerMap;
+
     public UserContext(){
         keycloakClient = Feign.builder()
                 .decoder(new JacksonDecoder())
                 .encoder(new FormEncoder())
                 .target(KeycloakClient.class, "http://localhost:8080");
         tokenResponse = new TokenResponse();
+        headerMap = new HashMap<>();
+        headerMap.put("Content-Type", "application/json");
     }
 
 
 
     public <T> T getFeignClient(Class<T> clazz) {
         Feign.Builder encoder = Feign.builder()
+                .errorDecoder(new RequestErrorDecoder())
                 .decoder(new GsonDecoder())
                 .encoder(new GsonEncoder());
         return encoder.target(clazz, baseUrl);

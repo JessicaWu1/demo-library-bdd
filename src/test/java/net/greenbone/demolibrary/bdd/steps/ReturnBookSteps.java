@@ -21,6 +21,8 @@ public class ReturnBookSteps {
                 .returnDate(new Date())
                 .returned(true)
                 .build();
-        userContext.setResponseStatusCode(userContext.getFeignClient(LendBookClient.class).updateLendBook(3L, lendBookrequest).status());
+        userContext.setResponseStatusCode(userContext.getFeignClient(LendBookClient.class)
+                .updateLendBook(3L, lendBookrequest,this.userContext.getHeaderMap())
+                .status());
     }
 }

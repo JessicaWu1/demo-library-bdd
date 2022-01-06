@@ -4,7 +4,9 @@ import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.keycloak.adapters.springsecurity.management.HttpSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,27 +29,34 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
      */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) {
+        SimpleAuthorityMapper grantedAuthorityMapper = new SimpleAuthorityMapper();
+        //grantedAuthorityMapper.setPrefix("ROLE_");
+
         KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
-        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
+        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(grantedAuthorityMapper);
         auth.authenticationProvider(keycloakAuthenticationProvider);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        super.configure(http);
         http.authorizeRequests()
-                .antMatchers(
-
-                ).permitAll()
                 .anyRequest().authenticated()
                 .and().cors()
                 .and().csrf().disable();
     }
 
-    //bruahct man das?
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(
                 );
+    }
+
+    @Bean
+    @Override
+    @ConditionalOnMissingBean(HttpSessionManager.class)
+    protected HttpSessionManager httpSessionManager() {
+        return new HttpSessionManager();
     }
 
     @Bean

@@ -14,7 +14,9 @@ public class DeleteUserSteps {
 
     @When("admin tries to delete another user")
     public void adminTriesToDeleteAnotherUser() {
-        int status = userContext.getFeignClient(UserClient.class).deleteUser(1L).status();
+        int status = userContext.getFeignClient(UserClient.class)
+                .deleteUser(1L,this.userContext.getHeaderMap())
+                .status();
         log.info("Status " + status);
         userContext.setResponseStatusCode(status);
     }
@@ -22,7 +24,7 @@ public class DeleteUserSteps {
     @When("admin tries to delete a non-existing user")
     public void adminTriesToDeleteANonExistingUser() {
         try{
-            userContext.getFeignClient(UserClient.class).deleteUser(3L);
+            userContext.getFeignClient(UserClient.class).deleteUser(3L,this.userContext.getHeaderMap());
         }catch(Exception e){
             userContext.setResponse(e);
         }

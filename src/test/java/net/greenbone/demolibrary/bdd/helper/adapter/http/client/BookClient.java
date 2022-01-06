@@ -3,25 +3,31 @@ package net.greenbone.demolibrary.bdd.helper.adapter.http.client;
 import feign.*;
 import net.greenbone.demolibrary.representations.request.BookRequest;
 import net.greenbone.demolibrary.representations.response.BookResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.Map;
 
-@Headers("Content-Type: application/json")
+//Bearer -> Auth Header mitsenden!
 public interface BookClient {
+
     @RequestLine("POST /book")
-    BookResponse createBook(BookRequest bookRequest);
+    BookResponse createBook(BookRequest bookRequest,@HeaderMap Map<String, Object> headerMap);
 
     @RequestLine("GET /book/{id}")
-    BookResponse getBookById(@Param("id") Long id);
+    BookResponse getBookById(@Param(value = "id") Long id,@HeaderMap Map<String, Object> headerMap);
 
     @RequestLine("GET /book")
-    List<BookResponse> getBooks();
+    List<BookResponse> getBooks(@HeaderMap Map<String, Object> headerMap);
 
     @RequestLine("PUT /book/{id}")
-    Response updateBook(@Param("id") Long id, BookRequest bookRequest);
+    Response updateBook(@Param(value ="id") Long id, BookRequest bookRequest,@HeaderMap Map<String, Object> headerMap);
 
     @RequestLine("DELETE /book/{id}")
-    Response deleteBook(@Param("id") Long id);
+    Response deleteBook(@Param(value ="id") Long id,@HeaderMap Map<String, Object> headerMap);
 }

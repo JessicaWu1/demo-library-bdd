@@ -46,6 +46,7 @@ public class LoginAndPermissionsSteps {
                             new KeyCloakLoginRequest("password", email, password, userContext.getClient_id(), userContext.getClient_secret()))
             );
             //this.userContext.setResponseStatusCode(200);
+            this.userContext.getHeaderMap().put("Authorization","Bearer " + this.userContext.getTokenResponse().getAccessToken());
         }catch(Exception e){
             log.info("Login failed: "+ e.getMessage() + e.getStackTrace());
             this.userContext.setTokenResponse(null);
