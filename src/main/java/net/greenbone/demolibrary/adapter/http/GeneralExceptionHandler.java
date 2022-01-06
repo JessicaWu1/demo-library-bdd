@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 @Order(1)
@@ -23,8 +24,16 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     //Each Exception Handled separately -> write a generalExceptionHandlerClass
     //exceptions, die bis zum controller gereicht werden, werden hier behandelt -> try catch aus den services raus und hier die überprüfungen auch
     @ExceptionHandler({EntityNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException entityNotFoundException){
         Map<String, String> message = Collections.singletonMap("response", entityNotFoundException.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({NoSuchElementException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException noSuchElementException){
+        Map<String, String> message = Collections.singletonMap("response", noSuchElementException.getMessage());
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 

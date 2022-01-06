@@ -23,12 +23,12 @@ public class ReadUserSteps {
 
     @When("user tries to read a specified user's information")
     public void userTriesToReadASpecifiedUserSInformation() {
-        userResponse = userContext.getFeignClient(UserClient.class).getUserById(1L,this.userContext.getHeaderMap());
+        userResponse = userContext.getFeignClient(UserClient.class).getUserById(6L,this.userContext.getHeaderMap());
     }
 
     @Then("the information to the specified user is shown")
     public void theInformationToTheSpecifiedUserIsShown() {
-        assertThat(1L, Matchers.is(userResponse.getId()));
+        assertThat(6L, Matchers.is(userResponse.getId()));
     }
 
     @When("user tries to read a non-existing user information")

@@ -29,7 +29,7 @@ public class ReadBookSteps {
 
     @When("user tries to read book information")
     public void userTriesToReadBookInformation() {
-        bookResponse =  userContext.getFeignClient(BookClient.class).getBookById(1L,this.userContext.getHeaderMap());
+        bookResponse =  userContext.getFeignClient(BookClient.class).getBookById(7L,this.userContext.getHeaderMap());
     }
 
     @Then("the information is shown")

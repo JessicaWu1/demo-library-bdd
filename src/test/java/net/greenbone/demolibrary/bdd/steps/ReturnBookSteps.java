@@ -16,13 +16,13 @@ public class ReturnBookSteps {
     @When("user tries to return a book")
     public void userTriesToReturnABook() {
         lendBookrequest = LendBookRequest.builder()
-                .bookId(1L)
-                .userId(2L)
+                .bookId(8L)
+                .userId(4L)
                 .returnDate(new Date())
                 .returned(true)
                 .build();
         userContext.setResponseStatusCode(userContext.getFeignClient(LendBookClient.class)
-                .updateLendBook(3L, lendBookrequest,this.userContext.getHeaderMap())
+                .updateLendBook(9L, lendBookrequest,this.userContext.getHeaderMap())
                 .status());
     }
 }

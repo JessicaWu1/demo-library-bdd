@@ -53,7 +53,7 @@ public class UserContext {
 
     public <T> T getFeignClient(Class<T> clazz) {
         Feign.Builder encoder = Feign.builder()
-                .errorDecoder(new RequestErrorDecoder())
+                //.errorDecoder(new RequestErrorDecoder())
                 .decoder(new GsonDecoder())
                 .encoder(new GsonEncoder());
         return encoder.target(clazz, baseUrl);
@@ -67,6 +67,8 @@ public class UserContext {
 
     public void setResponse(Throwable e){
         RequestException requestException = ExceptionExtractor.extractRequestException(e);
+        log.info("RequestException: "+requestException);
+        log.info("Statuscode: "+requestException.getStatus());
         this.responseStatusCode = requestException.getStatus();
         this.responseMessage = requestException.getMessage();
     }

@@ -41,7 +41,9 @@ public class EditBookSteps {
                 .quantity(2)
                 .build();
 
-        //userContext.setResponseStatusCode(userContext.getFeignClient(BookClient.class).updateBook(this.userContext.getTokenResponse().getAccessToken(),1L, bookRequest).status());
+        userContext.setResponseStatusCode(userContext.getFeignClient(BookClient.class)
+                .updateBook(1L, bookRequest, this.userContext.getHeaderMap())
+                .status());
     }
 
     @When("user tries to edit a non-existing book")
@@ -55,7 +57,7 @@ public class EditBookSteps {
                 .quantity(2)
                 .build();
         try{
-            //userContext.getFeignClient(BookClient.class).updateBook(this.userContext.getTokenResponse().getAccessToken(),3L, bookRequest);
+            userContext.getFeignClient(BookClient.class).updateBook(3L, bookRequest, this.userContext.getHeaderMap());
         }catch(Exception e){
             userContext.setResponse(e);
         }

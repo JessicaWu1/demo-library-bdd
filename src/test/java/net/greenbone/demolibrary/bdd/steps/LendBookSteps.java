@@ -27,8 +27,8 @@ public class LendBookSteps {
         lendBookRequest = LendBookRequest.builder()
                 .returned(false)
                 .returnDate(new Date())
-                .userId(1L)
-                .bookId(2L)
+                .userId(4L)
+                .bookId(8L)
                 .build();
         lendBookResponse = userContext.getFeignClient(LendBookClient.class).lendBook(lendBookRequest,this.userContext.getHeaderMap());
     }

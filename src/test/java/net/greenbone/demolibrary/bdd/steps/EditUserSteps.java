@@ -25,7 +25,7 @@ public class EditUserSteps {
                 .email("maxmustermann@example.com")
                 .build();
         try{
-            userContext.getFeignClient(UserClient.class).updateUser(3L, userRequest,this.userContext.getHeaderMap());
+            userContext.getFeignClient(UserClient.class).updateUser(2L, userRequest,this.userContext.getHeaderMap());
         }catch(Exception e){
             userContext.setResponse(e);
         }
