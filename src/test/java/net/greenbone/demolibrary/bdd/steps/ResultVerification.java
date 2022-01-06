@@ -11,6 +11,7 @@ import static org.junit.Assert.assertEquals;
 @Slf4j
 @RequiredArgsConstructor
 public class ResultVerification {
+
     private final UserContext userContext;
 
     @Then("the user gets a Bad Request Exception")
