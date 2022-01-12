@@ -23,7 +23,7 @@ public class ReadUserSteps {
 
     @When("user tries to read a specified user's information")
     public void userTriesToReadASpecifiedUserSInformation() {
-        userResponse = userContext.getFeignClient(UserClient.class).getUserById(6L,this.userContext.getHeaderMap());
+        userResponse = userContext.getFeignClient(UserClient.class).getUserById(6L);
     }
 
     @Then("the information to the specified user is shown")
@@ -34,7 +34,7 @@ public class ReadUserSteps {
     @When("user tries to read a non-existing user information")
     public void userTriesToReadANonExistingUserInformation() {
         try{
-            userResponse = userContext.getFeignClient(UserClient.class).getUserById(3L,this.userContext.getHeaderMap());
+            userResponse = userContext.getFeignClient(UserClient.class).getUserById(3L);
         }catch(Exception e){
             userContext.setResponse(e);
         }

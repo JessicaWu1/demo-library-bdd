@@ -12,11 +12,11 @@ public interface UserClient {
     UserResponse createUser(UserRequest userRequest);
 
     @RequestLine("GET /user/{id}")
-    UserResponse getUserById(@Param("id") Long id,@HeaderMap Map<String, Object> headerMap);
+    UserResponse getUserById(@Param("id") Long id);
 
     @RequestLine("PUT /user/{id}")
-    Response updateUser(@Param("id") Long id, UserRequest bookRequest,@HeaderMap Map<String, Object> headerMap);
+    Response updateUser(@Param("id") Long id, UserRequest bookRequest);
 
     @RequestLine("DELETE /user/{id}")
-    Response deleteUser(@Param("id") Long id,@HeaderMap Map<String, Object> headerMap);
+    Response deleteUser(@Param("id") Long id);
 }

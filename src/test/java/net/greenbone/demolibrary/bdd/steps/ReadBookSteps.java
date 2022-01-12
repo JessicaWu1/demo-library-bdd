@@ -29,7 +29,7 @@ public class ReadBookSteps {
 
     @When("user tries to read book information")
     public void userTriesToReadBookInformation() {
-        bookResponse =  userContext.getFeignClient(BookClient.class).getBookById(8L,this.userContext.getHeaderMap());
+        bookResponse =  userContext.getFeignClient(BookClient.class).getBookById(8L);
     }
 
     @Then("the information is shown")
@@ -41,7 +41,7 @@ public class ReadBookSteps {
     @When("user tries to read non-existing book information")
     public void userTriesToReadNonExistingBookInformation() {
         try{
-            bookResponse = userContext.getFeignClient(BookClient.class).getBookById(3L,this.userContext.getHeaderMap());
+            bookResponse = userContext.getFeignClient(BookClient.class).getBookById(3L);
         }catch(Exception e){
             userContext.setResponse(e);
         }

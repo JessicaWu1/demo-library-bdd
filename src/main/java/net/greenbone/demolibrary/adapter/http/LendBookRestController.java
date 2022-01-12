@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/lendBook")
 @RequiredArgsConstructor
-//@PreAuthorize("isAuthenticated()")
+@PreAuthorize("isAuthenticated()")
 @Slf4j
 public class LendBookRestController {
 

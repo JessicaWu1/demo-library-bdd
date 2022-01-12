@@ -34,7 +34,7 @@ public class ApplicationUserRestController {
     }
 
     //@PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createNewUser(@Valid @RequestBody UserRequest user){
         ApplicationUser createdUser = applicationUserService.createNewUser(user);

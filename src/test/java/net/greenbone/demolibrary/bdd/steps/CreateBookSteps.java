@@ -37,7 +37,7 @@ public class CreateBookSteps {
                     .publishingYear(2015)
                     .quantity(1)
                     .build();
-            bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest,this.userContext.getHeaderMap());
+            bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest);
         }catch(Exception e){
             log.info("Exception e", e);
         }
@@ -63,7 +63,7 @@ public class CreateBookSteps {
                 .quantity(1)
                 .build();
         try {
-            bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest,this.userContext.getHeaderMap());
+            bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest);
         }catch(Exception e){
             userContext.setResponse(e);
         }

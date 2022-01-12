@@ -43,7 +43,7 @@ public class EditBookSteps {
 
         userContext.setResponseStatusCode(
                 userContext.getFeignClient(BookClient.class)
-                        .updateBook(1L, bookRequest, this.userContext.getHeaderMap())
+                        .updateBook(1L, bookRequest)
                         .status());
     }
 
@@ -60,7 +60,7 @@ public class EditBookSteps {
         try{
             userContext.setResponseStatusCode(
                     userContext.getFeignClient(BookClient.class)
-                            .updateBook(3L, bookRequest, this.userContext.getHeaderMap())
+                            .updateBook(3L, bookRequest)
                             .status());
         }catch(Exception e){
             userContext.setResponse(e);

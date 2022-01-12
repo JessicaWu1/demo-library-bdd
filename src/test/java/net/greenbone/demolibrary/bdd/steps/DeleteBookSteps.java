@@ -29,7 +29,7 @@ public class DeleteBookSteps {
     @When("user tries to delete an existing book")
     public void userTriesToDeleteAnExistingBook() {
         userContext.setResponseStatusCode(userContext.getFeignClient(BookClient.class)
-                .deleteBook(7L,this.userContext.getHeaderMap())
+                .deleteBook(7L)
                 .status());
     }
 
@@ -38,7 +38,7 @@ public class DeleteBookSteps {
         try{
             userContext.setResponseStatusCode(
                     userContext.getFeignClient(BookClient.class)
-                            .deleteBook(3L,this.userContext.getHeaderMap())
+                            .deleteBook(3L)
                             .status());
         }catch(Exception e){
             userContext.setResponse(e);

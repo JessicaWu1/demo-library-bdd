@@ -7,10 +7,11 @@ import net.greenbone.demolibrary.representations.response.LendBookResponse;
 import java.util.List;
 import java.util.Map;
 
+@Headers("Content-Type: application/json")
 public interface LendBookClient {
     @RequestLine("POST /lendBook")
-    LendBookResponse lendBook(LendBookRequest bookRequest,@HeaderMap Map<String, Object> headerMap);
+    LendBookResponse lendBook(LendBookRequest bookRequest);
 
     @RequestLine("PUT /lendBook/{id}")
-    Response updateLendBook(@Param("id") Long id, LendBookRequest bookRequest,@HeaderMap Map<String, Object> headerMap);
+    Response updateLendBook(@Param("id") Long id, LendBookRequest bookRequest);
 }

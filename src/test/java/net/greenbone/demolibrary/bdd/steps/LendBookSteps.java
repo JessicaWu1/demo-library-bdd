@@ -36,7 +36,7 @@ public class LendBookSteps {
                 .bookId(8L)
                 .build();
         log.info("LendBook: " + lendBookRequest.getBookId() + " " + lendBookRequest.getUserId() + " " + lendBookRequest.getReturnDateIn() + " " + lendBookRequest.getReturned());
-        lendBookResponse = userContext.getFeignClient(LendBookClient.class).lendBook(lendBookRequest,this.userContext.getHeaderMap());
+        lendBookResponse = userContext.getFeignClient(LendBookClient.class).lendBook(lendBookRequest);
     }
 
     @Then("user is shown the return date of that book")
@@ -47,7 +47,7 @@ public class LendBookSteps {
     @When("user tries to lend a non-existing book")
     public void userTriesToLendANonExistingBook() {
         try{
-            lendBookResponse = userContext.getFeignClient(LendBookClient.class).lendBook(lendBookRequest,this.userContext.getHeaderMap());
+            lendBookResponse = userContext.getFeignClient(LendBookClient.class).lendBook(lendBookRequest);
         }catch(Exception e){
             userContext.setResponse(e);
         }

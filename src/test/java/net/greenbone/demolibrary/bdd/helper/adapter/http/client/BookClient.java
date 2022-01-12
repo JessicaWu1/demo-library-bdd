@@ -14,20 +14,21 @@ import java.util.List;
 import java.util.Map;
 
 //Bearer -> Auth Header mitsenden!
+@Headers("Content-Type: application/json")
 public interface BookClient {
 
     @RequestLine("POST /book")
-    BookResponse createBook(BookRequest bookRequest,@HeaderMap Map<String, Object> headerMap);
+    BookResponse createBook(BookRequest bookRequest);
 
     @RequestLine("GET /book/{id}")
-    BookResponse getBookById(@Param(value = "id") Long id,@HeaderMap Map<String, Object> headerMap);
+    BookResponse getBookById(@Param(value = "id") Long id);
 
     @RequestLine("GET /book")
-    List<BookResponse> getBooks(@HeaderMap Map<String, Object> headerMap);
+    List<BookResponse> getBooks();
 
     @RequestLine("PUT /book/{id}")
-    Response updateBook(@Param(value ="id") Long id, BookRequest bookRequest,@HeaderMap Map<String, Object> headerMap);
+    Response updateBook(@Param(value ="id") Long id, BookRequest bookRequest);
 
     @RequestLine("DELETE /book/{id}")
-    Response deleteBook(@Param(value ="id") Long id,@HeaderMap Map<String, Object> headerMap);
+    Response deleteBook(@Param(value ="id") Long id);
 }

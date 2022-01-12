@@ -15,7 +15,7 @@ public class DeleteUserSteps {
     @When("admin tries to delete another user")
     public void adminTriesToDeleteAnotherUser() {
         int status = userContext.getFeignClient(UserClient.class)
-                .deleteUser(2L,this.userContext.getHeaderMap())
+                .deleteUser(2L)
                 .status();
         log.info("Status " + status);
         userContext.setResponseStatusCode(status);
@@ -26,7 +26,7 @@ public class DeleteUserSteps {
         try{
             this.userContext.setResponseStatusCode(
                     userContext.getFeignClient(UserClient.class)
-                            .deleteUser(3L,this.userContext.getHeaderMap())
+                            .deleteUser(3L)
                             .status());
         }catch(Exception e){
             userContext.setResponse(e);

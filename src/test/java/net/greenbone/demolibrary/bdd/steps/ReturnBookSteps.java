@@ -22,7 +22,7 @@ public class ReturnBookSteps {
                 .returned(true)
                 .build();
         userContext.setResponseStatusCode(userContext.getFeignClient(LendBookClient.class)
-                .updateLendBook(9L, lendBookrequest,this.userContext.getHeaderMap())
+                .updateLendBook(9L, lendBookrequest)
                 .status());
     }
 }

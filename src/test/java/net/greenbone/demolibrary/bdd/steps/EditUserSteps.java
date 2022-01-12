@@ -27,7 +27,7 @@ public class EditUserSteps {
         try{
             userContext.setResponseStatusCode(
                     userContext.getFeignClient(UserClient.class)
-                            .updateUser(2L, userRequest,this.userContext.getHeaderMap())
+                            .updateUser(2L, userRequest)
                             .status());
         }catch(Exception e){
             userContext.setResponse(e);
@@ -46,7 +46,7 @@ public class EditUserSteps {
                 .build();
         userContext.setResponseStatusCode(
                 userContext.getFeignClient(UserClient.class)
-                        .updateUser(1L, userRequest,this.userContext.getHeaderMap())
+                        .updateUser(1L, userRequest)
                         .status());
     }
 }
