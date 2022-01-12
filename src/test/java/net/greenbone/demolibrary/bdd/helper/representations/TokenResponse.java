@@ -3,6 +3,8 @@ package net.greenbone.demolibrary.bdd.helper.representations;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class TokenResponse {
     @JsonProperty("access_token")
@@ -25,5 +27,11 @@ public class TokenResponse {
 
     @JsonProperty("session_state")
     private String sessionState;
+
+    private final LocalDateTime creationTime;
+
+    public TokenResponse() {
+        this.creationTime = LocalDateTime.now();
+    }
 
 }

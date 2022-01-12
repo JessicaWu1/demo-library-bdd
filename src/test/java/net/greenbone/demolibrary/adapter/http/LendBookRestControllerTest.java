@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -61,7 +62,7 @@ public class LendBookRestControllerTest {
         lendBookRequest = LendBookRequest.builder()
                 .bookId(1L)
                 .userId(2L)
-                .returnDate(new Date())
+                .returnDateIn(14)
                 .returned(false)
                 .build();
         Book book = Book.builder()
@@ -90,6 +91,13 @@ public class LendBookRestControllerTest {
                 .returnDate(new Date())
                 .build();
         lendBookResponse = LendBookResponse.lendBookToLendBookResponse(lendBook);
+    }
+
+    private Date setDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.DATE, 14);
+        return calendar.getTime();
     }
 
     @Test

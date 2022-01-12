@@ -41,7 +41,6 @@ public class CreateBookSteps {
         }catch(Exception e){
             log.info("Exception e", e);
         }
-
     }
 
     @And("the book information is shown")

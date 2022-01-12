@@ -43,7 +43,7 @@ public class CreateUserSteps {
                     .role("ADMIN")
                     .build();
 
-            userResponse =  userContext.getFeignClient(UserClient.class).createUser(userRequest,this.userContext.getHeaderMap());
+            userResponse =  userContext.getFeignClient(UserClient.class).createUser(userRequest);
         }catch(Exception e){
             log.info("Exception e: ", e);
         }
@@ -57,7 +57,7 @@ public class CreateUserSteps {
                 .role("ADMIN")
                 .build();
         try{
-            userResponse =  userContext.getFeignClient(UserClient.class).createUser(userRequest,this.userContext.getHeaderMap());
+            userResponse =  userContext.getFeignClient(UserClient.class).createUser(userRequest);
         }catch(Exception e){
             userContext.setResponse(e);
         }

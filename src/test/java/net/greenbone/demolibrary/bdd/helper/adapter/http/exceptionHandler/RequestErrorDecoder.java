@@ -13,8 +13,6 @@ public class RequestErrorDecoder implements ErrorDecoder {
         if (response.status() >= 400 && response.status() <= 599) {
             Response.Body body = response.body();
             String message = "";
-            log.info("RequestErrorDecoder: ResponseStatus" + response.status());
-            log.info("RequestErrorDecoder: ResponseBody" + response.body().toString());
             if (body != null) {
                 message = body.toString();
             }

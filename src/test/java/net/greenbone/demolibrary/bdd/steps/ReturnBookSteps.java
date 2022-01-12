@@ -18,7 +18,7 @@ public class ReturnBookSteps {
         lendBookrequest = LendBookRequest.builder()
                 .bookId(8L)
                 .userId(4L)
-                .returnDate(new Date())
+                .returnDateIn(0)
                 .returned(true)
                 .build();
         userContext.setResponseStatusCode(userContext.getFeignClient(LendBookClient.class)

@@ -23,8 +23,6 @@ public class LoginAndPermissionsSteps {
 
     private final UserContext userContext;
     private ApplicationUser applicationUser;
-    private String email;
-    private String password;
 
     public LoginAndPermissionsSteps(UserContext userContext){
         this.userContext = userContext;
@@ -33,20 +31,17 @@ public class LoginAndPermissionsSteps {
                 .password("password")
                 .role(Role.ADMIN)
                 .build();
-        this.email = "maxmustermann@example.com";
-        this.password = "password";
+        userContext.setEmail("maxmustermann@example.com");
+        userContext.setPassword("password");
     }
 
     @When("user tries to log in with his email address and password")
     public void login(){
-        //ToDo
         try{
             this.userContext.setTokenResponse(
                     this.userContext.getKeycloakClient().login(
-                            new KeyCloakLoginRequest("password", email, password, userContext.getClient_id(), userContext.getClient_secret()))
+                            new KeyCloakLoginRequest("password", userContext.getEmail(), userContext.getPassword(), userContext.getClient_id(), userContext.getClient_secret()))
             );
-            //this.userContext.setResponseStatusCode(200);
-            this.userContext.getHeaderMap().put("Authorization","Bearer " + this.userContext.getTokenResponse().getAccessToken());
         }catch(Exception e){
             log.info("Login failed: "+ e.getMessage() + e.getStackTrace());
             this.userContext.setTokenResponse(null);

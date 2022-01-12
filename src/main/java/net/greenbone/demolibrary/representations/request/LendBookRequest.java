@@ -18,8 +18,7 @@ public class LendBookRequest implements LendBook.Create, LendBook.Update {
     @NotNull(message = "No Book specified. Book is required.")
     private Long bookId;
 
-    @NotNull(message = "A return Date is required.")
-    private Date returnDate;
+    private int returnDateIn;
     private boolean returned;
 
     @Override

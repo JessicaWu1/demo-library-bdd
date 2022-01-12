@@ -45,20 +45,22 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({NullPointerException.class})
+/*    @ExceptionHandler({NullPointerException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<Object> handleNullPointerException(NullPointerException nullPointerException){
         Map<String, String> message = Collections.singletonMap("response", nullPointerException.getMessage());
         return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    }*/
 
     @ExceptionHandler({AccessDeniedException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException accessDeniedException){
         Map<String, String> message = Collections.singletonMap("response", accessDeniedException.getMessage());
         return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({AuthenticationException.class})
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<Map<String,String>> handleAuthenticationException(AuthenticationException authenticationException){
         Map<String, String> message = Collections.singletonMap("response", authenticationException.getMessage());
         return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);

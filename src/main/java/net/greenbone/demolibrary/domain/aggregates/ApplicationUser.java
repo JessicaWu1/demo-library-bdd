@@ -38,7 +38,7 @@ public class ApplicationUser {
     @NotNull(message = "Late Fees instance required")
     private Float lateFees;
 
-    @OneToMany(mappedBy = "applicationUser", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "applicationUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<LendBook> borrowedBooks;
 
     @Builder

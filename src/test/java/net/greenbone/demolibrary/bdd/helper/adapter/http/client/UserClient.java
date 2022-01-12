@@ -6,9 +6,10 @@ import net.greenbone.demolibrary.representations.response.UserResponse;
 
 import java.util.Map;
 
+@Headers("Content-Type: application/json")
 public interface UserClient {
     @RequestLine("POST /user")
-    UserResponse createUser(UserRequest userRequest,@HeaderMap Map<String, Object> headerMap);
+    UserResponse createUser(UserRequest userRequest);
 
     @RequestLine("GET /user/{id}")
     UserResponse getUserById(@Param("id") Long id,@HeaderMap Map<String, Object> headerMap);

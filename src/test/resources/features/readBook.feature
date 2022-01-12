@@ -1,5 +1,7 @@
 Feature: reading information of a book
-
+  #background
+  #when nochmal
+  #regulärer ausdruck erfolgerich eingeloggt -> optionales successful einfügen
   Scenario: user reads book information
     Given user is logged in
     When user tries to read book information

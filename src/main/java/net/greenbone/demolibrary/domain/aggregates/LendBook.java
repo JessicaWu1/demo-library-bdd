@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -16,12 +17,10 @@ public class LendBook {
 
     @NotNull(message = "No borrowing user specified. User is required.")
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private ApplicationUser applicationUser;
 
     @NotNull(message = "No Book specified. Book is required.")
     @OneToOne
-    @JoinColumn(name = "book_id")
     private Book book;
 
     @NotNull(message = "No returnDate, but it is required.")
@@ -39,18 +38,31 @@ public class LendBook {
     }
 
     public static LendBook fromCreate(Book book, ApplicationUser user, Create lendBookRequest) {
+        Date currentTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentTime);
+        calendar.add(Calendar.DATE, 14);
+        Date returnDate = calendar.getTime();
         return LendBook.builder()
                 .book(book)
                 .applicationUser(user)
-                .returnDate(lendBookRequest.getReturnDate())
+                .returnDate(returnDate)
                 .returned(lendBookRequest.getReturned())
                 .build();
     }
 
 
     public void fromUpdate(Update lendBookRequest) {
-        this.returnDate = lendBookRequest.getReturnDate();
+        this.returnDate = setReturnDateForUpdate(lendBookRequest.getReturnDateIn());
         this.returned = lendBookRequest.getReturned();
+    }
+
+    private Date setReturnDateForUpdate(int datesInTheFuture) {
+        Date currentTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentTime);
+        calendar.add(Calendar.DATE, datesInTheFuture);
+        return calendar.getTime();
     }
 
     public interface Create {
@@ -58,7 +70,7 @@ public class LendBook {
 
         Long getUserId();
 
-        Date getReturnDate();
+        int getReturnDateIn();
         boolean getReturned();
 
     }
@@ -68,7 +80,7 @@ public class LendBook {
 
         Long getUserId();
 
-        Date getReturnDate();
+        int getReturnDateIn();
 
         boolean getReturned();
     }

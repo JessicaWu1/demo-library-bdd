@@ -21,15 +21,18 @@ public class LendBookService {
     private final BookRepository bookRepository;
 
     public LendBook lendingABook(LendBook.Create lendBookRequest){
+        log.info("Service LendBook");
         Book book = bookRepository.findById(lendBookRequest.getBookId())
                 .orElseThrow(() -> new NoSuchElementException("Could not find Book with ID: " + lendBookRequest.getBookId()));
         ApplicationUser user = applicationUserRepository.findById(lendBookRequest.getUserId())
                 .orElseThrow(() -> new NoSuchElementException("Could not find Book with ID: " + lendBookRequest.getUserId()));
-
+        log.info("Service Lendbook User: "+ user);
+        log.info("Service Lendbook book: "+ book);
         LendBook lendBook = LendBook.fromCreate(book, user, lendBookRequest);
-
+        log.info("Service LendBook lendbook" + lendBook);
         LendBook createdLendBook = lendBookRepository.save(lendBook);
         user.getBorrowedBooks().add(createdLendBook);
+        log.info("Service LendBook created " + createdLendBook);
         applicationUserRepository.save(user);
         return createdLendBook;
     }
@@ -41,7 +44,7 @@ public class LendBookService {
         toUpdate.fromUpdate(lendBookRequest);
         lendBookRepository.save(toUpdate);
     }
-    //Hard oder Soft delete??
+
     public void deleteLendBook(Long id){
         lendBookRepository.deleteById(id);
     }

@@ -7,7 +7,6 @@ import net.greenbone.demolibrary.representations.response.LendBookResponse;
 import java.util.List;
 import java.util.Map;
 
-@Headers("Content-Type: application/json")
 public interface LendBookClient {
     @RequestLine("POST /lendBook")
     LendBookResponse lendBook(LendBookRequest bookRequest,@HeaderMap Map<String, Object> headerMap);

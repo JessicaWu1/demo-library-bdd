@@ -56,13 +56,13 @@ public class ApplicationUserRestControllerTest {
                 .build();
         userRequest = UserRequest.builder()
                 .name("Toller Name")
-                .email("maxmustermann@gmail.com")
+                .email("maxmustermann@example.com")
                 .password("password")
                 .role("ADMIN")
                 .build();
         applicationUser = ApplicationUser.builder()
                 .name("Toller Name")
-                .email("maxmustermann@gmail.com")
+                .email("maxmustermann@example.com")
                 .password("password")
                 .role(Role.valueOf("ADMIN"))
                 .build();
@@ -103,7 +103,7 @@ public class ApplicationUserRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.name").value("Toller Name"))
-                .andExpect(jsonPath("$.email").value("maxmustermann@gmail.com"))
+                .andExpect(jsonPath("$.email").value("maxmustermann@example.com"))
                 .andExpect(jsonPath("$.password").value("password"))
                 .andExpect(jsonPath("$.role").value("ADMIN"));
     }
@@ -119,7 +119,7 @@ public class ApplicationUserRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.name").value("Toller Name"))
-                .andExpect(jsonPath("$.email").value("maxmustermann@gmail.com"))
+                .andExpect(jsonPath("$.email").value("maxmustermann@example.com"))
                 .andExpect(jsonPath("$.password").value("password"))
                 .andExpect(jsonPath("$.role").value("ADMIN"));
     }
@@ -175,7 +175,7 @@ public class ApplicationUserRestControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.name").value("Toller Name"))
-                .andExpect(jsonPath("$.email").value("maxmustermann@gmail.com"))
+                .andExpect(jsonPath("$.email").value("maxmustermann@example.com"))
                 .andExpect(jsonPath("$.password").value("password"))
                 .andExpect(jsonPath("$.role").value("ADMIN"));
     }
