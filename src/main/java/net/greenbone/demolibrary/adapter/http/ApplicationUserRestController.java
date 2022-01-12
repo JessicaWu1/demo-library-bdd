@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-//@PreAuthorize("isAuthenticated()")
+@PreAuthorize("isAuthenticated()")
 public class ApplicationUserRestController {
     private final ApplicationUserService applicationUserService;
 
@@ -33,7 +33,7 @@ public class ApplicationUserRestController {
         return UserResponse.applicationUserToUserResponse(applicationUser);
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value="", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createNewUser(@Valid @RequestBody UserRequest user){
