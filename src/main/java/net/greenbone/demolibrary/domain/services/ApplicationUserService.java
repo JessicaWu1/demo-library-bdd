@@ -29,25 +29,8 @@ public class ApplicationUserService {
     @Transactional
     public ApplicationUser createNewUser(ApplicationUser.Create user){
         List<LendBook> borrowedBooks = new ArrayList<>();
-        if(!user.getBorrowedBooks().isEmpty()){
-            borrowedBooks = lendBookRepository.findAllById(user.getBorrowedBooks());
-            //borrowedBooks = lendBookRepository.findAllByIdIn(user.getBorrowedBooks());
-        }
         ApplicationUser newUser = ApplicationUser.fromCreate(user, borrowedBooks);
         return applicationUserRepository.save(newUser);
-        /*ApplicationUser newUser;
-        if(user.getBorrowedBooks() != null){
-            if(!user.getBorrowedBooks().isEmpty()) {
-                List<LendBook> borrowedBooks = lendBookRepository.findAllById(user.getBorrowedBooks());
-                newUser = ApplicationUser.fromCreate(user, borrowedBooks);
-            }else{
-                newUser = ApplicationUser.fromCreate(user, null);
-            }
-        }else{
-            newUser = ApplicationUser.fromCreate(user, null);
-        }
-        ApplicationUser createdNewUser = applicationUserRepository.save(newUser);
-        return createdNewUser;*/
     }
 
     @Transactional

@@ -45,7 +45,10 @@ public class CreateUserSteps {
 
             userResponse =  userContext.getFeignClient(UserClient.class).createUser(userRequest);
         }catch(Exception e){
+            log.info("UserRequest: "+userRequest);
+            log.info("UserResponse: "+userResponse);
             log.info("Exception e: ", e);
+            userContext.setResponse(e);
         }
     }
 
@@ -65,6 +68,7 @@ public class CreateUserSteps {
 
     @Then("the created user information is shown")
     public void theCreatedUserInformationIsShown() {
+        log.info("UserResponse" + userResponse);
         assertThat(userRequest.getEmail(), Matchers.is(userResponse.getEmail()));
         assertThat(userRequest.getName(), Matchers.is(userResponse.getName()));
         assertThat(userRequest.getPassword(), Matchers.is(userResponse.getPassword()));
