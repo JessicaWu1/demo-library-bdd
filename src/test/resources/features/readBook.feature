@@ -1,13 +1,15 @@
 Feature: reading information of a book
+
+  Background:
+    Given user is logged in
+
   #background
   #when nochmal
   #regulärer ausdruck erfolgerich eingeloggt -> optionales successful einfügen
   Scenario: user reads book information
-    Given user is logged in
-    When user tries to read book information
-    Then the information is shown
+    When user reads book information
+    Then the information is returned
 
   Scenario: user tries to read non-existing book information
-    Given user is logged in
-    When user tries to read non-existing book information
-    Then the user gets a Not Found Exception
+    When user reads non-existing book information
+    Then the user gets a Not Found message

@@ -26,10 +26,10 @@ public class DeleteBookSteps {
     private BookResponse bookResponse;
     private Map<String,String> message;
 
-    @When("user tries to delete an existing book")
+    @When("user deletes an existing book")
     public void userTriesToDeleteAnExistingBook() {
         userContext.setResponseStatusCode(userContext.getFeignClient(BookClient.class)
-                .deleteBook(7L)
+                .deleteBook(1L)
                 .status());
     }
 
@@ -41,6 +41,16 @@ public class DeleteBookSteps {
                             .deleteBook(3L)
                             .status());
         }catch(Exception e){
+            userContext.setResponse(e);
+        }
+    }
+
+    @When("user tries reading the book")
+    public void userTriesReadingTheBook() {
+        try {
+            bookResponse = userContext.getFeignClient(BookClient.class)
+                    .getBookById(1L);
+        } catch (Exception e) {
             userContext.setResponse(e);
         }
     }

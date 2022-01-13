@@ -38,9 +38,7 @@ public class ApplicationUserRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createNewUser(@Valid @RequestBody UserRequest user){
         ApplicationUser createdUser = applicationUserService.createNewUser(user);
-        log.warn("CreatedUserResponse in Request: "+createdUser);
         UserResponse createdUserResponse = UserResponse.applicationUserToUserResponse(createdUser);
-        log.warn("CreatedUserResponse in Request: "+createdUserResponse);
         return createdUserResponse;
     }
 

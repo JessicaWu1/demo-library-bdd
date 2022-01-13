@@ -14,7 +14,7 @@ public class EditUserSteps {
     private final UserContext userContext;
     private UserRequest userRequest;
 
-    @When("admin tries to edit user information from a non-existing user")
+    @When("admin edits user information from a non-existing user")
     public void adminTriesToEditUserInformationFromANonExistingUser() {
         userRequest = UserRequest.builder()
                 .name("Max Muster")
@@ -34,7 +34,7 @@ public class EditUserSteps {
         }
     }
 
-    @When("user tries to edit their information")
+    @When("user edits their information")
     public void userTriesToEditATheirInformation() {
         userRequest = UserRequest.builder()
                 .name("Max Muster")

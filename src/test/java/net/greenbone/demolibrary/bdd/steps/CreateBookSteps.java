@@ -43,7 +43,7 @@ public class CreateBookSteps {
         }
     }
 
-    @And("the book information is shown")
+    @And("the book information is returned")
     public void theCreatedBookInformationIsShown() {
         assertThat(bookResponse.getAuthor(), Matchers.is(bookRequest.getAuthor()));
         assertThat(bookResponse.getTitle(), Matchers.is(bookRequest.getTitle()));
@@ -53,7 +53,7 @@ public class CreateBookSteps {
         assertThat(bookResponse.getQuantity(), Matchers.is(bookRequest.getQuantity()));
     }
 
-    @When("user tries to create a Book with missing information")
+    @When("user creates a Book with missing information")
     public void userTriesToCreateABookWithMissingInformation() {
         bookRequest = BookRequest.builder()
                 .author("Newcomer Author")

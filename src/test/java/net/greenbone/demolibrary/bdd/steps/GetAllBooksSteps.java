@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @RequiredArgsConstructor
-public class ReadBookAsList {
+public class GetAllBooksSteps {
 
     private final UserContext userContext;
     private List<BookResponse> books;

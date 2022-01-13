@@ -12,7 +12,7 @@ import net.greenbone.demolibrary.bdd.helper.adapter.http.client.UserClient;
 public class DeleteUserSteps {
     private final UserContext userContext;
 
-    @When("admin tries to delete another user")
+    @When("admin deletes another user")
     public void adminTriesToDeleteAnotherUser() {
         int status = userContext.getFeignClient(UserClient.class)
                 .deleteUser(2L)

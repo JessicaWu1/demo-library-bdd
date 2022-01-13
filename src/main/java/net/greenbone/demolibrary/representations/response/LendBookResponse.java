@@ -17,7 +17,7 @@ public class LendBookResponse {
     private Long id;
     private Long userId;
     private Long bookId;
-    private Date returnDate;
+    private LocalDate returnDate;
     private boolean returned;
 
     public static LendBookResponse lendBookToLendBookResponse(LendBook lendBook){

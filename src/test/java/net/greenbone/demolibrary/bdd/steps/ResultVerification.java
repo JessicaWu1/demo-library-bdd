@@ -14,7 +14,7 @@ public class ResultVerification {
 
     private final UserContext userContext;
 
-    @Then("the user gets a Bad Request Exception")
+    @Then("the user gets a Bad Request message")
     public void theUserGetsABadRequestException() {
         assertEquals(400, userContext.getResponseStatusCode().intValue());
     }

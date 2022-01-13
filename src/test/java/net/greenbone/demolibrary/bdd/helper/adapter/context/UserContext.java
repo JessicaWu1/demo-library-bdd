@@ -46,17 +46,12 @@ public class UserContext {
     @Setter
     private String password;
 
-    @Getter
-    Map<String, Object> headerMap;
-
     public UserContext(){
         keycloakClient = Feign.builder()
                 .decoder(new JacksonDecoder())
                 .encoder(new FormEncoder())
                 .target(KeycloakClient.class, "http://localhost:8080");
         tokenResponse = new TokenResponse();
-        headerMap = new HashMap<>();
-        headerMap.put("Content-Type", "application/json");
     }
 
 

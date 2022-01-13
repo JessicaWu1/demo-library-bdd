@@ -30,7 +30,7 @@ public class EditBookSteps {
     private final UserContext userContext;
     private BookRequest bookRequest;
 
-    @When("user edits something in an existing book")
+    @When("user edits an existing book")
     public void userEditsSomethingInAnExistingBook() {
         bookRequest = BookRequest.builder()
                 .title("Greatest Book you'll ever read")

@@ -13,7 +13,7 @@ public class ReturnBookSteps {
     private final UserContext userContext;
 
     private LendBookRequest lendBookrequest;
-    @When("user tries to return a book")
+    @When("user returns a book")
     public void userTriesToReturnABook() {
         lendBookrequest = LendBookRequest.builder()
                 .bookId(8L)

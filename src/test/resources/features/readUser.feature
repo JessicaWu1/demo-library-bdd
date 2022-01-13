@@ -2,10 +2,10 @@ Feature: reading user information
 
   Scenario: user is trying to read user information
     Given user is logged in
-    When user tries to read a specified user's information
-    Then the information to the specified user is shown
+    When user reads their information
+    Then the information of the user is returned
 
-  Scenario: user tries to read user information from a non-existing user
-    Given user is logged in
-    When user tries to read a non-existing user information
-    Then the user gets a Not Found Exception
+  Scenario: admin reads user information from a non-existing user
+    Given admin is logged in
+    When admin reads a non-existing user information
+    Then the user gets a Not Found message

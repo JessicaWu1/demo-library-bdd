@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,12 +25,12 @@ public class LendBook {
     private Book book;
 
     @NotNull(message = "No returnDate, but it is required.")
-    private Date returnDate;
+    private LocalDate returnDate;
 
     private boolean returned;
 
     @Builder
-    private LendBook(Long id, ApplicationUser applicationUser, Book book, Date returnDate, boolean returned) {
+    private LendBook(Long id, ApplicationUser applicationUser, Book book, LocalDate returnDate, boolean returned) {
         this.id = id;
         this.applicationUser = applicationUser;
         this.book = book;
@@ -37,12 +38,7 @@ public class LendBook {
         this.returned = returned;
     }
 
-    public static LendBook fromCreate(Book book, ApplicationUser user, Create lendBookRequest) {
-        Date currentTime = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentTime);
-        calendar.add(Calendar.DATE, 14);
-        Date returnDate = calendar.getTime();
+    public static LendBook fromCreate(Book book, ApplicationUser user, Create lendBookRequest, LocalDate returnDate) {
         return LendBook.builder()
                 .book(book)
                 .applicationUser(user)
@@ -52,17 +48,9 @@ public class LendBook {
     }
 
 
-    public void fromUpdate(Update lendBookRequest) {
-        this.returnDate = setReturnDateForUpdate(lendBookRequest.getReturnDateIn());
+    public void fromUpdate(Update lendBookRequest, LocalDate newReturnDate) {
+        this.returnDate = newReturnDate;
         this.returned = lendBookRequest.getReturned();
-    }
-
-    private Date setReturnDateForUpdate(int datesInTheFuture) {
-        Date currentTime = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentTime);
-        calendar.add(Calendar.DATE, datesInTheFuture);
-        return calendar.getTime();
     }
 
     public interface Create {

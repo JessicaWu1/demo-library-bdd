@@ -9,12 +9,15 @@ import net.greenbone.demolibrary.bdd.helper.adapter.context.UserContext;
 import net.greenbone.demolibrary.bdd.helper.adapter.http.client.LendBookClient;
 import net.greenbone.demolibrary.representations.request.LendBookRequest;
 import net.greenbone.demolibrary.representations.response.LendBookResponse;
+import org.apache.http.client.utils.DateUtils;
 import org.hamcrest.Matchers;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -23,10 +26,16 @@ public class LendBookSteps {
     private final UserContext userContext;
     private LendBookRequest lendBookRequest;
     private LendBookResponse lendBookResponse;
-    private Date date;
+    private LocalDate date = setDate();
+
+    private LocalDate setDate() {
+        LocalDate returnDate = LocalDate.now();
+        returnDate = returnDate.plusDays(14);
+        return returnDate;
+    }
 
 
-    @When("user tries to lend an existing book")
+    @When("user borrows an existing book")
     public void userTriesToLendAnExistingBook() {
 
         lendBookRequest = LendBookRequest.builder()
@@ -39,9 +48,9 @@ public class LendBookSteps {
         lendBookResponse = userContext.getFeignClient(LendBookClient.class).lendBook(lendBookRequest);
     }
 
-    @Then("user is shown the return date of that book")
+    @Then("the relevant information to the borrowed book is returned")
     public void userIsShownTheReturnDateOfThatBook() {
-        assertEquals(date, Matchers.is(lendBookResponse.getReturnDate()));
+        assertTrue(date.isEqual(lendBookResponse.getReturnDate()));
     }
 
     @When("user tries to lend a non-existing book")
