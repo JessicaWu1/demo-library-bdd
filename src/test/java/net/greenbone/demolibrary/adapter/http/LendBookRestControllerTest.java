@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -88,16 +89,9 @@ public class LendBookRestControllerTest {
                 .book(book)
                 .applicationUser(user)
                 .returned(false)
-                .returnDate(new Date())
+                .returnDate(LocalDate.now().plusDays(14))
                 .build();
         lendBookResponse = LendBookResponse.lendBookToLendBookResponse(lendBook);
-    }
-
-    private Date setDate() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.set(Calendar.DATE, 14);
-        return calendar.getTime();
     }
 
     @Test

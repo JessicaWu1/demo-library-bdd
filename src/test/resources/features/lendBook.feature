@@ -7,6 +7,7 @@ Feature: lending a Book
     When user borrows an existing book
     Then the relevant information to the borrowed book is returned
 
-    Scenario: User is trying to lend/borrow a non-existing book
-      When user tries to lend a non-existing book
-      Then the user gets a Not Found message
+  Scenario: User is trying to lend/borrow a non-existing book
+    When user tries to lend a non-existing book
+    Then the user gets a Not Found message
+    

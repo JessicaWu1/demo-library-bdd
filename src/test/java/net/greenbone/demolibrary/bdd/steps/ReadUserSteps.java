@@ -1,9 +1,5 @@
 package net.greenbone.demolibrary.bdd.steps;
 
-import feign.Feign;
-import feign.gson.GsonDecoder;
-import feign.gson.GsonEncoder;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
@@ -22,17 +18,26 @@ public class ReadUserSteps {
     private UserResponse userResponse;
 
     @When("user reads their information")
-    public void userTriesToReadASpecifiedUserSInformation() {
+    public void userReadsTheirInformation() {
         userResponse = userContext.getFeignClient(UserClient.class).getUserById(4L);
     }
 
     @Then("the information of the user is returned")
-    public void theInformationToTheSpecifiedUserIsShown() {
+    public void theInformationOfTheUserIsReturned() {
         assertThat(4L, Matchers.is(userResponse.getId()));
     }
 
     @When("admin reads a non-existing user information")
-    public void userTriesToReadANonExistingUserInformation() {
+    public void adminReadsANonExistingUserInformation() {
+        try{
+            userResponse = userContext.getFeignClient(UserClient.class).getUserById(1L);
+        }catch(Exception e){
+            userContext.setResponse(e);
+        }
+    }
+
+    @When("user reads a non-existing user information")
+    public void userReadsANonExistingUserInformation() {
         try{
             userResponse = userContext.getFeignClient(UserClient.class).getUserById(1L);
         }catch(Exception e){

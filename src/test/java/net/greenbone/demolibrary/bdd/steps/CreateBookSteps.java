@@ -38,6 +38,7 @@ public class CreateBookSteps {
                     .quantity(1)
                     .build();
             bookResponse = userContext.getFeignClient(BookClient.class).createBook(bookRequest);
+            userContext.setResponseStatusCode(200);
         }catch(Exception e){
             log.info("Exception e", e);
         }

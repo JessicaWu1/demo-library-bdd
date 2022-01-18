@@ -10,6 +10,6 @@ Feature: reading information of a book
     When user reads book information
     Then the information is returned
 
-  Scenario: user tries to read non-existing book information
+  Scenario: user tries to read information from a non-existing book
     When user reads non-existing book information
     Then the user gets a Not Found message

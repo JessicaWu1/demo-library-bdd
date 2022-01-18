@@ -16,6 +16,8 @@ public class RequestErrorDecoder implements ErrorDecoder {
             if (body != null) {
                 message = body.toString();
             }
+            log.info("Message: " + message);
+            log.info("ResponseStatus " +response.status());
             return new RequestException(message, response.status());
         }
         return errorStatus(methodKey, response);
